@@ -1,0 +1,307 @@
+/* contact.css - Page-specific styling for The Paper Trail contact page */
+:root {
+  --bg-page: #f3f0e8;
+  --bg-input: #e9e5db;
+  --bg-input-focus: #ffffff;
+  --text-dark: #1e2220;
+  --text-muted: #626563;
+  --accent-eyebrow: #3b5a54;
+  --btn-bg: #2b473c;
+  --btn-hover: #1e352b;
+  --accent-glow: rgba(43, 71, 60, 0.18);
+  --error-red: #b84333;
+}
+
+body {
+  background-color: var(--bg-page);
+}
+
+.story {
+  position: relative;
+  overflow: hidden;
+  min-height: calc(100vh - 170px);
+}
+
+.story .container {
+  position: relative;
+  z-index: 2;
+  background: transparent;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+}
+
+.paper-decorations {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.floating-paper {
+  position: absolute;
+  color: var(--btn-bg);
+  opacity: 0.15;
+  stroke: currentColor;
+  fill: none;
+  animation: floatPaper 10s ease-in-out infinite alternate;
+}
+
+.paper-1 {
+  width: 64px;
+  height: 64px;
+  top: 12%;
+  right: 10%;
+  animation-duration: 9s;
+}
+
+.paper-2 {
+  width: 56px;
+  height: 56px;
+  top: 46%;
+  left: 8%;
+  animation-duration: 11s;
+  animation-delay: -3s;
+}
+
+.paper-3 {
+  width: 72px;
+  height: 72px;
+  bottom: 12%;
+  right: 18%;
+  animation-duration: 10s;
+  animation-delay: -5s;
+}
+
+@keyframes floatPaper {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(-14px, -18px) rotate(8deg);
+  }
+  100% {
+    transform: translate(16px, 16px) rotate(-6deg);
+  }
+}
+
+.section-head h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2.4rem, 3vw, 3rem);
+  font-weight: 700;
+  margin: 0 0 1.25rem 0;
+  color: var(--text-dark);
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s backwards;
+}
+
+
+ .eyebrow-teal {
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+ .hero-tagline {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-size: 1.35rem;
+  line-height: 1.5;
+  color: var(--text-dark);
+  margin-bottom: 2.5rem;
+  max-width: 620px;
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+}
+
+#contactForm .form-field:nth-child(1) {
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+}
+
+#contactForm .form-field:nth-child(2) {
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+}
+
+#contactForm .form-field:nth-child(3) {
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
+}
+
+#contactForm .btn-primary {
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.7s both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.eyebrow,
+.eyebrow-teal {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-eyebrow);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+#contactForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-field .eyebrow span {
+  color: var(--error-red);
+}
+
+input[type="text"],
+input[type="email"],
+textarea {
+  width: 100%;
+  background-color: var(--bg-input);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 1rem 1rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  box-sizing: border-box;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #908d86;
+}
+
+textarea {
+  min-height: 160px;
+  resize: vertical;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  background-color: var(--bg-input-focus);
+  border-color: var(--btn-bg);
+  box-shadow: 0 0 0 4px var(--accent-glow), 0 8px 18px rgba(43, 71, 60, 0.12);
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  align-self: flex-start;
+  background-color: var(--btn-bg);
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.95rem 1.8rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-primary:hover {
+  background-color: var(--btn-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(43, 71, 60, 0.24);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 120%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16), transparent);
+  transition: transform 0.5s ease;
+  transform: translateX(0);
+}
+
+.btn-primary:hover::after {
+  transform: translateX(120%);
+}
+
+.form-error {
+  display: none;
+  color: var(--error-red);
+  font-size: 0.85rem;
+  margin-top: 0.4rem;
+  font-weight: 500;
+}
+
+.form-field.invalid input,
+.form-field.invalid textarea {
+  border-color: var(--error-red);
+  background-color: #fff5f4;
+  animation: subtleShake 0.35s ease-in-out;
+}
+
+.form-field.invalid .form-error {
+  display: block;
+}
+
+.newsletter-message {
+  display: none;
+  padding: 1rem 1.2rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  color: var(--btn-bg);
+  background-color: #e9f0eb;
+  border-left: 3px solid var(--btn-bg);
+}
+
+.newsletter-message.show {
+  display: block;
+  animation: fadeIn 0.3s ease-out;
+  margin-bottom: 1.5rem;
+}
+
+@keyframes subtleShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 720px) {
+  .story .container {
+    padding: 2rem 1rem 3rem;
+  }
+
+  .paper-1,
+  .paper-2,
+  .paper-3 {
+    width: 52px;
+    height: 52px;
+  }
+
+  .paper-2 {
+    top: 52%;
+    left: 4%;
+  }
+}
