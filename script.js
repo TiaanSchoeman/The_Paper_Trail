@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
   const basketCount = document.getElementById('basketCount');
-  const basketBtn = document.getElementById('basketBtn');
-  const newsletterForm = document.getElementById('newsletterForm');
+  const basketBtn = document.getElementById('basketBtn') || document.querySelector('.btn-basket');
+  const newsletterForm = document.getElementById('newsletter-form');
   const contactForm = document.getElementById('contactForm');
-  const emailInput = document.getElementById('emailInput');
+  const emailInput = document.getElementById('newsletter-email');
   const contactMessage = document.getElementById('contactMessage');
 
   let count = 0;
@@ -65,5 +65,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, { threshold: 0.15 });
 
-  document.querySelectorAll('.fade-in').forEach((item) => observer.observe(item));
+  document.querySelectorAll('.reveal').forEach((item) => observer.observe(item));
 });
