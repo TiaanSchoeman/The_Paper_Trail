@@ -1,11 +1,182 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-ZA">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Events</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>What's On — The Paper Trail</title>
+  <meta name="description" content="Readings, poetry slams, translation nights and author evenings at The Paper Trail, 14 Rosemary Lane, Old Town.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap">
+
+  <!-- Person 1's shared stylesheet (feature-foundation). -->
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* ---------------------------------------------------------------------
+       Page-specific only. Everything here is scoped to .page-events so it
+       cannot alter the homepage's three-card events preview, which uses the
+       same .event-grid / .event-card classes from style.css.
+    --------------------------------------------------------------------- */
+
+    .page-events .hero {
+      padding-bottom: var(--space-5);
+    }
+
+    .page-events .events-list {
+      padding: var(--space-5) 0 var(--space-6);
+    }
+
+    /* style.css sizes .event-grid for exactly three cards in one row.
+       A full listing wraps, so rows need separating and the left border has
+       to reset on every row, not only on the first card. */
+    .page-events .event-grid {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      row-gap: var(--space-4);
+      margin-top: var(--space-4);
+    }
+
+    .page-events .event-card {
+      padding-top: var(--space-3);
+      border-top: 1px solid var(--color-border);
+    }
+
+    .page-events .event-card:nth-child(3n + 1) {
+      padding-left: 0;
+      border-left: none;
+    }
+
+    .page-events .event-blurb {
+      font-size: 0.92rem;
+      color: #4a453c;
+    }
+
+    .page-events .event-meta {
+      margin-top: var(--space-2);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+
+    .page-events .event-card.is-full .event-meta {
+      color: var(--color-rust);
+    }
+
+    .page-events .events-empty {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.25rem;
+      color: #4a453c;
+      padding: var(--space-4) 0;
+    }
+
+    @media (max-width: 900px) {
+      .page-events .event-card:nth-child(3n + 1) {
+        padding-left: 0;
+      }
+    }
+  </style>
 </head>
-<body>
-    
+<body class="page-events">
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">
+        <span class="logo-title">The Paper Trail</span>
+        <span class="logo-sub">Booksellers since 1998</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Main">
+        <a href="index.html">Home</a>
+        <a href="events.html" class="active" aria-current="page">What's On</a>
+        <a href="shop.html">Shop</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+
+      <a class="btn-basket" href="shop.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <path d="M3 6h18"></path>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        Basket
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">14 Rosemary Lane &middot; Old Town &middot; Since 1998</p>
+        <h1 class="hero-title">What's On</h1>
+        <p class="hero-sub">Booksellers since 1998</p>
+        <hr class="hero-divider">
+        <p class="hero-tagline">
+          Three evenings a week we push the shelves back and host something else.
+          Everything below is free unless the listing says otherwise.
+        </p>
+      </div>
+    </section>
+
+    <section class="events-list">
+      <div class="container">
+        <div class="section-head">
+          <h2>Upcoming</h2>
+          <p class="eyebrow" id="events-count"></p>
+        </div>
+
+        <!-- Populated by events.js -->
+        <ul class="event-grid" id="event-grid"></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <p class="logo-title">The Paper Trail</p>
+          <p class="est">Est. 1998</p>
+          <p>An independent bookshop turning into something else three nights a week, since 1998.</p>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-heading">Visit</p>
+          <a href="contact.html">14 Rosemary Lane</a>
+          <a href="contact.html">Old Town</a>
+          <p>
+            Mon&ndash;Fri 09:00&ndash;18:00<br>
+            Sat 09:00&ndash;16:00<br>
+            Sun Closed
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-heading">Navigate</p>
+          <a href="index.html">Home</a>
+          <a href="events.html">What's On</a>
+          <a href="shop.html">Shop</a>
+          <a href="contact.html">Contact</a>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-heading">Follow</p>
+          <a href="#">Instagram</a>
+          <a href="#">Facebook</a>
+          <a href="#">Twitter / X</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>The Paper Trail &middot; 14 Rosemary Lane &middot; Old Town &middot; Est. 1998</p>
+        <p>&copy; 2026 The Paper Trail. Independently set and printed in Old Town.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="events.js"></script>
 </body>
 </html>
