@@ -26,6 +26,9 @@
       margin-top: var(--space-4);
     }
 
+    /* Cover art from images/covers/. The --card-color block from style.css
+       stays behind the image, so a missing file falls back to the flat colour
+       cover from the homepage rather than a broken image. */
     .page-shop .book-cover {
       position: relative;
       overflow: hidden;
@@ -40,41 +43,22 @@
       transition: transform 0.4s ease;
     }
 
-    .page-shop .book-cover::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.55) 0%,
-        rgba(0, 0, 0, 0.25) 45%,
-        rgba(0, 0, 0, 0.75) 100%
-      );
-    }
-
     .page-shop .book-cover-title,
-    .page-shop .book-cover-author,
-    .page-shop .book-cover-credit {
+    .page-shop .book-cover-author {
       position: relative;
       z-index: 1;
     }
 
+    /* .has-cover is added by shop.js only after the file actually loads. A real
+       cover already carries its own title and author artwork, so the overlay
+       text would be printing it twice. No file, no class, text stays. */
+    .page-shop .book-cover.has-cover .book-cover-title,
+    .page-shop .book-cover.has-cover .book-cover-author {
+      display: none;
+    }
+
     .page-shop .book-card:hover .book-cover-img {
       transform: scale(1.04);
-    }
-
-    .page-shop .book-cover-credit {
-      position: absolute;
-      right: var(--space-2);
-      bottom: var(--space-1);
-      font-size: 0.6rem;
-      letter-spacing: 0.06em;
-      color: rgba(255, 255, 255, 0.7);
-    }
-
-    .page-shop .shop-credit {
-      margin-top: var(--space-4);
-      text-align: right;
     }
 
     .page-shop .shop-hero-grid {
@@ -210,12 +194,15 @@
           </p>
         </div>
 
+        <!-- Drop a photo of the shop floor in as images/shop-hero.jpg. Until
+             it exists, the gradient on .shop-hero-image shows through. -->
         <div class="shop-hero-image">
           <img
-            src="https://images.unsplash.com/photo-1521123845560-14093637aa7d?auto=format&amp;fit=crop&amp;w=1000&amp;q=70"
-            alt="A reader holding an open paperback."
+            src="images/shop-hero.jpg"
+            alt="Shelves on the shop floor at The Paper Trail."
             loading="lazy"
-            decoding="async">
+            decoding="async"
+            onerror="this.remove()">
         </div>
       </div>
     </section>
@@ -232,10 +219,6 @@
 
         <!-- Screen-reader announcement for basket changes. -->
         <p class="eyebrow basket-status" id="basket-status" role="status" aria-live="polite"></p>
-
-        <p class="eyebrow shop-credit">
-          Cover photography from <a href="https://unsplash.com/">Unsplash</a>. Free to use, attribution not required.
-        </p>
       </div>
     </section>
   </main>
