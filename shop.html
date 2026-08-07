@@ -9,18 +9,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap">
-
-  <!-- Person 1's shared stylesheet (feature-foundation). -->
   <link rel="stylesheet" href="style.css">
 
   <style>
-    /* ---------------------------------------------------------------------
-       Page-specific only. style.css already defines .book-grid, .book-card,
-       .book-cover and the --card-color custom property. What it does not
-       define is a price row, a stock label or an add-to-cart button, because
-       the homepage only previews covers. Those are added here, scoped to
-       .page-shop so the homepage grid is untouched.
-    --------------------------------------------------------------------- */
 
     .page-shop .hero {
       padding-bottom: var(--space-5);
@@ -35,9 +26,6 @@
       margin-top: var(--space-4);
     }
 
-    /* Photo covers. The --card-color block from style.css stays behind the
-       image: it shows while the photo loads, and it is what remains if the
-       photo fails, so a card is never blank. */
     .page-shop .book-cover {
       position: relative;
       overflow: hidden;
@@ -52,8 +40,6 @@
       transition: transform 0.4s ease;
     }
 
-    /* Darkens the photo so the white serif title stays legible over any image.
-       Sits between the photo and the text, hence the z-index on both. */
     .page-shop .book-cover::after {
       content: "";
       position: absolute;
@@ -91,7 +77,6 @@
       text-align: right;
     }
 
-    /* Shop hero image, mirroring the homepage story block. */
     .page-shop .shop-hero-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -156,8 +141,6 @@
       text-align: center;
     }
 
-    /* Disabled needs its own rule: .btn-primary sets a solid green background
-       that would otherwise make an unusable button look clickable. */
     .page-shop .btn-add:disabled {
       background: transparent;
       border: 1px solid var(--color-border);
