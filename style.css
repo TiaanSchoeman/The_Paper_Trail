@@ -297,7 +297,7 @@ button {
 }
 
 .story-image {
-  background-image: url("images/rose.jpg");
+  background-image: url("https://www.rottentomatoes.com/celebrity/rosemary_lane/pictures");
   background-size: cover;
   background-position: center;
   width: 100%;
