@@ -1,5 +1,15 @@
+/* =========================================================
+   THE PAPER TRAIL — GLOBAL STYLESHEET
+   Owner: Person 1 (Foundation & Homepage)
+   Contains: design tokens, reset, nav, footer, hero,
+   and all homepage section styles. Other pages (events,
+   shop, contact) should link this file and extend it
+   with their own page-specific rules underneath.
+   ========================================================= */
+
+/* ---------- Design tokens ---------- */
 :root {
-  --color-bg: #faf3e3;
+  --color-bg: #f4f1ea;
   --color-bg-alt: #efebe1;
   --color-dark: #1a1712;
   --color-text: #201c17;
@@ -25,7 +35,7 @@
   --radius: 4px;
 }
 
-
+/* ---------- Reset ---------- */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -71,6 +81,7 @@ button {
   padding: 0 2rem;
 }
 
+/* ---------- Reusable type helpers ---------- */
 .eyebrow {
   font-size: 0.72rem;
   font-weight: 600;
@@ -112,6 +123,7 @@ button {
   font-size: 2rem;
 }
 
+/* ---------- Buttons ---------- */
 .btn {
   display: inline-block;
   padding: 0.85rem 1.75rem;
@@ -161,6 +173,7 @@ button {
   height: 16px;
 }
 
+/* ---------- Header / Nav ---------- */
 .site-header {
   background: var(--color-bg);
   border-bottom: 1px solid var(--color-border);
@@ -221,6 +234,7 @@ button {
   display: none;
 }
 
+/* ---------- Hero ---------- */
 .hero {
   border-bottom: 1px solid var(--color-dark);
   padding: var(--space-5) 0 var(--space-6);
@@ -266,6 +280,7 @@ button {
   gap: 1rem;
 }
 
+/* ---------- Our Story ---------- */
 .story {
   padding: var(--space-6) 0;
   border-bottom: 1px solid var(--color-border);
@@ -297,9 +312,16 @@ button {
 }
 
 .story-image {
-  aspect-ratio: 3 / 4;
+  border-radius: var(--radius);
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(135deg, #caa06a 0%, #8a5a34 55%, #4a3320 100%);
 }
 
+/* Swap the gradient above for a real photo when available:
+   <img src="assets/story-photo.jpg" alt="Curved bookshelf interior"> */
+
+/* ---------- New This Week (book grid) ---------- */
 .new-releases {
   padding: var(--space-6) 0;
   border-bottom: 1px solid var(--color-border);
@@ -351,6 +373,7 @@ button {
   color: var(--color-text-muted);
 }
 
+/* ---------- What's On (events preview) ---------- */
 .events-preview {
   padding: var(--space-6) 0;
   border-bottom: 1px solid var(--color-border);
@@ -397,6 +420,7 @@ button {
   color: #4a453c;
 }
 
+/* ---------- Newsletter (dark section) ---------- */
 .newsletter {
   background: var(--color-dark);
   color: #fff;
@@ -465,7 +489,7 @@ button {
   color: #e0a487;
 }
 
-
+/* ---------- Footer ---------- */
 .site-footer {
   background: var(--color-bg);
 }
@@ -539,6 +563,7 @@ button {
   margin-bottom: 0.3rem;
 }
 
+/* ---------- Scroll-reveal animation hook (used by script.js) ---------- */
 .reveal {
   opacity: 0;
   transform: translateY(24px);
@@ -550,6 +575,133 @@ button {
   transform: translateY(0);
 }
 
+/* =========================================================
+   CONTACT PAGE
+   ========================================================= */
+
+.page-header {
+  padding: var(--space-5) 0 var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.page-header h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 5vw, 3.4rem);
+  margin: var(--space-2) 0 var(--space-2);
+}
+
+.page-lede {
+  color: #4a453c;
+  max-width: 56ch;
+  font-size: 1.05rem;
+}
+
+.contact-section {
+  padding: var(--space-6) 0;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-field label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.form-field input,
+.form-field textarea {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  padding: 0.85rem 1rem;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  color: var(--color-text);
+  resize: vertical;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: var(--color-green);
+}
+
+.form-field input.error,
+.form-field textarea.error {
+  border-color: var(--color-rust);
+}
+
+.field-error {
+  font-size: 0.8rem;
+  color: var(--color-rust);
+  min-height: 1.1em;
+}
+
+.contact-form .btn {
+  align-self: flex-start;
+}
+
+.form-status {
+  font-size: 0.9rem;
+  color: var(--color-green);
+}
+
+.form-status.error {
+  color: var(--color-rust);
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-3);
+  background: var(--color-bg-alt);
+  border-radius: var(--radius);
+}
+
+.info-block p {
+  color: #4a453c;
+  font-size: 0.92rem;
+  margin-bottom: var(--space-1);
+}
+
+.info-block a {
+  display: block;
+  font-size: 0.92rem;
+  color: var(--color-text);
+  margin-bottom: 0.4rem;
+}
+
+.info-block a:hover {
+  color: var(--color-green);
+}
+
+@media (max-width: 900px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Responsive ---------- */
 @media (max-width: 900px) {
   .main-nav {
     display: none;
