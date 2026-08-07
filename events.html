@@ -9,9 +9,178 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap">
+
+  <!-- Person 1's shared stylesheet (feature-foundation). -->
   <link rel="stylesheet" href="style.css">
 
-  
+  <style>
+    /* ---------------------------------------------------------------------
+       Page-specific only. Everything here is scoped to .page-events so it
+       cannot alter the homepage's three-card events preview, which uses the
+       same .event-grid / .event-card classes from style.css.
+    --------------------------------------------------------------------- */
+
+    .page-events .hero {
+      padding-bottom: var(--space-5);
+    }
+
+    .page-events .events-list {
+      padding: var(--space-5) 0 var(--space-6);
+    }
+
+    /* style.css sizes .event-grid for exactly three cards in one row.
+       A full listing wraps, so rows need separating and the left border has
+       to reset on every row, not only on the first card. */
+    .page-events #events-count {
+      margin-top: var(--space-1);
+    }
+
+    .page-events .event-grid {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      row-gap: var(--space-4);
+      margin-top: var(--space-4);
+    }
+
+    .page-events .event-card {
+      padding-top: var(--space-3);
+      border-top: 1px solid var(--color-border);
+    }
+
+    .page-events .event-card:nth-child(3n + 1) {
+      padding-left: 0;
+      border-left: none;
+    }
+
+    .page-events .event-blurb {
+      font-size: 0.92rem;
+      color: #4a453c;
+    }
+
+    .page-events .event-meta {
+      margin-top: var(--space-2);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+
+    .page-events .event-card.is-full .event-meta {
+      color: var(--color-rust);
+    }
+
+    .page-events .events-empty {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.25rem;
+      color: #4a453c;
+      padding: var(--space-4) 0;
+    }
+
+    /* --- Add event form ------------------------------------------------
+       style.css styles .newsletter-form for the dark footer band, so none of
+       it is reusable on the cream background. These rules are new, not
+       overrides. */
+
+    .page-events .add-event-panel {
+      margin-top: var(--space-3);
+      padding: var(--space-4);
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+    }
+
+    .page-events .add-event-panel[hidden] {
+      display: none;
+    }
+
+    .page-events .add-event-panel h3 {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      margin-bottom: var(--space-3);
+    }
+
+    .page-events .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-3);
+    }
+
+    .page-events .field-wide {
+      grid-column: 1 / -1;
+    }
+
+    .page-events label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .page-events input,
+    .page-events textarea {
+      width: 100%;
+      padding: 0.7rem 0.85rem;
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      color: var(--color-text);
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 2px;
+    }
+
+    .page-events textarea {
+      resize: vertical;
+      min-height: 5rem;
+    }
+
+    .page-events input:focus,
+    .page-events textarea:focus {
+      outline: 2px solid var(--color-green);
+      outline-offset: 1px;
+    }
+
+    .page-events input.is-invalid,
+    .page-events textarea.is-invalid {
+      border-color: var(--color-rust);
+      background: #fbf1ec;
+    }
+
+    .page-events .field-error {
+      display: block;
+      margin-top: 0.3rem;
+      font-size: 0.78rem;
+      color: var(--color-rust);
+      min-height: 1em;
+    }
+
+    .page-events .form-actions {
+      display: flex;
+      gap: var(--space-2);
+      align-items: center;
+      margin-top: var(--space-3);
+    }
+
+    .page-events .form-status {
+      font-size: 0.85rem;
+      color: var(--color-green);
+    }
+
+    @media (max-width: 560px) {
+      .page-events .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .page-events .event-card:nth-child(3n + 1) {
+        padding-left: 0;
+      }
+    }
+  </style>
 </head>
 <body class="page-events">
 
@@ -58,7 +227,58 @@
       <div class="container">
         <div class="section-head">
           <h2>Upcoming</h2>
-          <p class="eyebrow" id="events-count"></p>
+          <button class="btn btn-outline" type="button" id="add-event-toggle"
+                  aria-expanded="false" aria-controls="add-event-panel">
+            Add an event
+          </button>
+        </div>
+
+        <p class="eyebrow" id="events-count"></p>
+
+        <div class="add-event-panel" id="add-event-panel" hidden>
+          <h3>New event</h3>
+
+          <!-- novalidate turns off the browser's own bubbles so the messages
+               below are the only ones shown. The JS still checks everything. -->
+          <form id="add-event-form" novalidate>
+            <div class="form-grid">
+              <div>
+                <label for="event-date">Date and time</label>
+                <input type="datetime-local" id="event-date" name="date" required>
+                <span class="field-error" id="error-date"></span>
+              </div>
+
+              <div>
+                <label for="event-seats">Seats available</label>
+                <input type="number" id="event-seats" name="seats" min="0" max="200" value="20" required>
+                <span class="field-error" id="error-seats"></span>
+              </div>
+
+              <div class="field-wide">
+                <label for="event-title">Title</label>
+                <input type="text" id="event-title" name="title" maxlength="80" required>
+                <span class="field-error" id="error-title"></span>
+              </div>
+
+              <div class="field-wide">
+                <label for="event-host">Hosted by</label>
+                <input type="text" id="event-host" name="host" maxlength="60" required>
+                <span class="field-error" id="error-host"></span>
+              </div>
+
+              <div class="field-wide">
+                <label for="event-blurb">Description</label>
+                <textarea id="event-blurb" name="blurb" maxlength="240" required></textarea>
+                <span class="field-error" id="error-blurb"></span>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn btn-primary" type="submit">Add to listing</button>
+              <button class="btn btn-outline" type="button" id="cancel-event">Cancel</button>
+              <span class="form-status" id="form-status" role="status" aria-live="polite"></span>
+            </div>
+          </form>
         </div>
 
         <!-- Populated by events.js -->
