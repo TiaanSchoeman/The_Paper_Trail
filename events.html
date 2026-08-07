@@ -9,17 +9,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap">
-
-  <!-- Person 1's shared stylesheet (feature-foundation). -->
   <link rel="stylesheet" href="style.css">
 
   <style>
-    /* ---------------------------------------------------------------------
-       Page-specific only. Everything here is scoped to .page-events so it
-       cannot alter the homepage's three-card events preview, which uses the
-       same .event-grid / .event-card classes from style.css.
-    --------------------------------------------------------------------- */
-
     .page-events .hero {
       padding-bottom: var(--space-5);
     }
@@ -28,9 +20,6 @@
       padding: var(--space-5) 0 var(--space-6);
     }
 
-    /* style.css sizes .event-grid for exactly three cards in one row.
-       A full listing wraps, so rows need separating and the left border has
-       to reset on every row, not only on the first card. */
     .page-events .event-grid {
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       row-gap: var(--space-4);
