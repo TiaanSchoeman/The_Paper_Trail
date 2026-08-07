@@ -1,11 +1,208 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-ZA">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shop — The Paper Trail</title>
+  <meta name="description" content="Literary fiction, poetry and non-fiction on the shelves at The Paper Trail, 14 Rosemary Lane, Old Town.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap">
+
+  <!-- Person 1's shared stylesheet (feature-foundation). -->
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* ---------------------------------------------------------------------
+       Page-specific only. style.css already defines .book-grid, .book-card,
+       .book-cover and the --card-color custom property. What it does not
+       define is a price row, a stock label or an add-to-cart button, because
+       the homepage only previews covers. Those are added here, scoped to
+       .page-shop so the homepage grid is untouched.
+    --------------------------------------------------------------------- */
+
+    .page-shop .hero {
+      padding-bottom: var(--space-5);
+    }
+
+    .page-shop .shelves {
+      padding: var(--space-5) 0 var(--space-6);
+    }
+
+    .page-shop .book-grid {
+      row-gap: var(--space-5);
+      margin-top: var(--space-4);
+    }
+
+    .page-shop .book-meta {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-1);
+      margin-top: var(--space-1);
+    }
+
+    .page-shop .book-price {
+      font-family: "JetBrains Mono", "Courier New", monospace;
+      font-size: 0.9rem;
+      color: var(--color-text);
+    }
+
+    .page-shop .book-stock {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-green);
+    }
+
+    .page-shop .book-card.is-out .book-stock {
+      color: var(--color-rust);
+    }
+
+    .page-shop .book-card.is-out .book-cover {
+      filter: grayscale(0.55);
+      opacity: 0.7;
+    }
+
+    .page-shop .btn-add {
+      display: block;
+      width: 100%;
+      margin-top: var(--space-2);
+      text-align: center;
+    }
+
+    /* Disabled needs its own rule: .btn-primary sets a solid green background
+       that would otherwise make an unusable button look clickable. */
+    .page-shop .btn-add:disabled {
+      background: transparent;
+      border: 1px solid var(--color-border);
+      color: var(--color-text-muted);
+      cursor: not-allowed;
+    }
+
+    .page-shop .btn-add:disabled:hover {
+      background: transparent;
+    }
+
+    .page-shop .basket-count {
+      display: inline-block;
+      min-width: 1.25rem;
+      padding: 0 0.35rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.22);
+      font-family: "JetBrains Mono", "Courier New", monospace;
+      font-size: 0.75rem;
+      text-align: center;
+    }
+
+    .page-shop .basket-status {
+      margin-top: var(--space-3);
+      min-height: 1.2em;
+    }
+  </style>
 </head>
-<body>
-    
+<body class="page-shop">
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">
+        <span class="logo-title">The Paper Trail</span>
+        <span class="logo-sub">Booksellers since 1998</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Main">
+        <a href="index.html">Home</a>
+        <a href="events.html">What's On</a>
+        <a href="shop.html" class="active" aria-current="page">Shop</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+
+      <button class="btn-basket" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <path d="M3 6h18"></path>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        Basket <span class="basket-count" id="basket-count">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">14 Rosemary Lane &middot; Old Town &middot; Since 1998</p>
+        <h1 class="hero-title">The Shelves</h1>
+        <p class="hero-sub">Booksellers since 1998</p>
+        <hr class="hero-divider">
+        <p class="hero-tagline">
+          What we stock is what we love: literary fiction, poetry that risks something,
+          non-fiction that reads like a novel.
+        </p>
+      </div>
+    </section>
+
+    <section class="shelves">
+      <div class="container">
+        <div class="section-head">
+          <h2>New this week</h2>
+          <p class="eyebrow" id="shop-count"></p>
+        </div>
+
+        <!-- Populated by shop.js -->
+        <ul class="book-grid" id="book-grid"></ul>
+
+        <!-- Screen-reader announcement for basket changes. -->
+        <p class="eyebrow basket-status" id="basket-status" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <p class="logo-title">The Paper Trail</p>
+          <p class="est">Est. 1998</p>
+          <p>An independent bookshop turning into something else three nights a week, since 1998.</p>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-heading">Visit</p>
+          <a href="contact.html">14 Rosemary Lane</a>
+          <a href="contact.html">Old Town</a>
+          <p>
+            Mon&ndash;Fri 09:00&ndash;18:00<br>
+            Sat 09:00&ndash;16:00<br>
+            Sun Closed
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-heading">Navigate</p>
+          <a href="index.html">Home</a>
+          <a href="events.html">What's On</a>
+          <a href="shop.html">Shop</a>
+          <a href="contact.html">Contact</a>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-heading">Follow</p>
+          <a href="#">Instagram</a>
+          <a href="#">Facebook</a>
+          <a href="#">Twitter / X</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>The Paper Trail &middot; 14 Rosemary Lane &middot; Old Town &middot; Est. 1998</p>
+        <p>&copy; 2026 The Paper Trail. Independently set and printed in Old Town.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="shop.js"></script>
 </body>
 </html>
