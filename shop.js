@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  var UNSPLASH_PARAMS = "?auto=format&fit=crop&w=600&q=70";
+  var COVER_PATH = "images/covers/";
 
   var BOOKS = [
     {
@@ -10,8 +10,7 @@
       priceCents: 34900,
       inStock: true,
       cover: "#2f4f3b",
-      photoId: "photo-1532012197267-da84d127e765",
-      photoBy: "Jaredd Craig"
+      coverFile: "intermezzo.jpg"
     },
     {
       title: "James",
@@ -19,8 +18,7 @@
       priceCents: 32900,
       inStock: true,
       cover: "#1c3350",
-      photoId: "photo-1629992101753-56d196c8aabb",
-      photoBy: "Tim Alex"
+      coverFile: "james.jpg"
     },
     {
       title: "The Serviceberry",
@@ -28,8 +26,7 @@
       priceCents: 27500,
       inStock: false,
       cover: "#4a6b33",
-      photoId: "photo-1705837861201-dd000d929a31",
-      photoBy: "Heather Green"
+      coverFile: "serviceberry.jpg"
     },
     {
       title: "Witch",
@@ -37,8 +34,7 @@
       priceCents: 24000,
       inStock: true,
       cover: "#3d1f5c",
-      photoId: "photo-1544947950-fa07a98d237f",
-      photoBy: "Sincerely Media"
+      coverFile: "witch.jpg"
     },
     {
       title: "A Thousand Small Returns",
@@ -46,8 +42,7 @@
       priceCents: 31000,
       inStock: true,
       cover: "#7a3b22",
-      photoId: "photo-1512820790803-83ca734da794",
-      photoBy: "Daria Nepriakhina"
+      coverFile: "thousand-returns.jpg"
     },
     {
       title: "Orbital",
@@ -55,8 +50,7 @@
       priceCents: 29900,
       inStock: false,
       cover: "#14343a",
-      photoId: "photo-1592496431122-2349e0fbc666",
-      photoBy: "Morgan Housel"
+      coverFile: "orbital.jpg"
     },
     {
       title: "The Safekeep",
@@ -64,8 +58,7 @@
       priceCents: 33500,
       inStock: true,
       cover: "#5c2338",
-      photoId: "photo-1528459105426-b9548367069b",
-      photoBy: "Annie Spratt"
+      coverFile: "safekeep.jpg"
     },
     {
       title: "Held",
@@ -73,12 +66,9 @@
       priceCents: 28900,
       inStock: true,
       cover: "#2f3b2a",
-      photoId: "photo-1537495329792-41ae41ad3bf0",
-      photoBy: "Kari Shea"
+      coverFile: "held.jpg"
     }
   ];
-
-  var basketCount = 0;
 
   var priceFormatter = new Intl.NumberFormat("en-ZA", {
     style: "currency",
@@ -101,21 +91,6 @@
     return node;
   }
 
-  function updateBasket(title) {
-    basketCount += 1;
-
-    var counter = document.getElementById("basket-count");
-    var status = document.getElementById("basket-status");
-
-    if (counter) {
-      counter.textContent = String(basketCount);
-    }
-    if (status) {
-      status.textContent = title + " added. " + basketCount + " item" +
-        (basketCount === 1 ? "" : "s") + " in basket.";
-    }
-  }
-
   /* --- Card ----------------------------------------------------------- */
 
   function buildCover(book) {
@@ -125,24 +100,28 @@
     // .book-cover { background: var(--card-color) }. Setting the property on
     // the card is how that hook is meant to be used, so the cover colour comes
     // from the data without any per-book CSS.
-    if (book.photoId) {
+    if (book.coverFile) {
       var img = el("img", "book-cover-img");
-      img.src = "https://images.unsplash.com/" + book.photoId + UNSPLASH_PARAMS;
+      img.src = COVER_PATH + book.coverFile;
 
-      // Decorative: the title and author sit on top of the photo as real text,
-      // so an alt description here would only be read out twice.
+      // Decorative: the title and author are already on the card below, so an
+      // alt description here would only be read out twice.
       img.alt = "";
       img.loading = "lazy";
       img.decoding = "async";
 
-      // If Unsplash is unreachable, drop the <img> so the coloured block shows
-      // instead of a broken-image icon.
+      // .has-cover is added on load, not up front. If the file is missing the
+      // class never lands and the overlay text stays visible over the colour
+      // block, so the card degrades instead of going blank.
+      img.addEventListener("load", function () {
+        cover.classList.add("has-cover");
+      });
+
       img.addEventListener("error", function () {
         img.remove();
       });
 
       cover.appendChild(img);
-      cover.appendChild(el("span", "book-cover-credit", "Photo: " + book.photoBy));
     }
 
     cover.appendChild(el("span", "book-cover-title", book.title));
@@ -169,7 +148,11 @@
 
     if (book.inStock) {
       btn.addEventListener("click", function () {
-        updateBasket(book.title);
+        // The basket lives in script.js so the count survives navigation and
+        // the header on every page shows the same number.
+        if (window.PaperTrail && window.PaperTrail.basket) {
+          window.PaperTrail.basket.add(book.title);
+        }
       });
     } else {
       // The boolean drives the real disabled state, not just the styling.

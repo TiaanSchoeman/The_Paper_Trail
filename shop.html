@@ -35,9 +35,9 @@
       margin-top: var(--space-4);
     }
 
-    /* Photo covers. The --card-color block from style.css stays behind the
-       image: it shows while the photo loads, and it is what remains if the
-       photo fails, so a card is never blank. */
+    /* Cover artwork. The --card-color block from style.css stays behind the
+       image: it shows while the file loads, and it is what remains if the
+       file is missing, so a card is never blank. */
     .page-shop .book-cover {
       position: relative;
       overflow: hidden;
@@ -52,43 +52,23 @@
       transition: transform 0.4s ease;
     }
 
-    /* Darkens the photo so the white serif title stays legible over any image.
-       Sits between the photo and the text, hence the z-index on both. */
-    .page-shop .book-cover::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.55) 0%,
-        rgba(0, 0, 0, 0.25) 45%,
-        rgba(0, 0, 0, 0.75) 100%
-      );
-    }
-
-    .page-shop .book-cover-title,
-    .page-shop .book-cover-author,
-    .page-shop .book-cover-credit {
-      position: relative;
-      z-index: 1;
-    }
-
     .page-shop .book-card:hover .book-cover-img {
       transform: scale(1.04);
     }
 
-    .page-shop .book-cover-credit {
-      position: absolute;
-      right: var(--space-2);
-      bottom: var(--space-1);
-      font-size: 0.6rem;
-      letter-spacing: 0.06em;
-      color: rgba(255, 255, 255, 0.7);
+    /* shop.js adds .has-cover only once the image has actually loaded. The
+       artwork already carries the title and author, so the overlay text is
+       hidden rather than printed on top of it. No file means no class, and
+       the text stays over the colour block. */
+    .page-shop .book-cover.has-cover .book-cover-title,
+    .page-shop .book-cover.has-cover .book-cover-author {
+      display: none;
     }
 
-    .page-shop .shop-credit {
-      margin-top: var(--space-4);
-      text-align: right;
+    .page-shop .book-cover-title,
+    .page-shop .book-cover-author {
+      position: relative;
+      z-index: 1;
     }
 
     /* Shop hero image, mirroring the homepage story block. */
@@ -169,17 +149,6 @@
       background: transparent;
     }
 
-    .page-shop .basket-count {
-      display: inline-block;
-      min-width: 1.25rem;
-      padding: 0 0.35rem;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.22);
-      font-family: "JetBrains Mono", "Courier New", monospace;
-      font-size: 0.75rem;
-      text-align: center;
-    }
-
     .page-shop .basket-status {
       margin-top: var(--space-3);
       min-height: 1.2em;
@@ -195,20 +164,25 @@
         <span class="logo-sub">Booksellers since 1998</span>
       </a>
 
-      <nav class="main-nav" aria-label="Main">
+      <button class="nav-toggle" type="button" aria-label="Menu"
+              aria-expanded="false" aria-controls="main-nav">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="main-nav" id="main-nav" aria-label="Primary">
         <a href="index.html">Home</a>
         <a href="events.html">What's On</a>
         <a href="shop.html" class="active" aria-current="page">Shop</a>
         <a href="contact.html">Contact</a>
       </nav>
 
-      <button class="btn-basket" type="button">
+      <button class="btn-basket" type="button" aria-label="View basket">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
           <path d="M3 6h18"></path>
           <path d="M16 10a4 4 0 0 1-8 0"></path>
         </svg>
-        Basket <span class="basket-count" id="basket-count">0</span>
+        Basket <span class="basket-count" id="basket-count" data-basket-count>0</span>
       </button>
     </div>
   </header>
@@ -229,8 +203,9 @@
 
         <div class="shop-hero-image">
           <img
-            src="https://images.unsplash.com/photo-1521123845560-14093637aa7d?auto=format&amp;fit=crop&amp;w=1000&amp;q=70"
-            alt="A reader holding an open paperback."
+            src="images/shop-hero.jpg"
+            alt="Filled bookshelves running the length of the shop."
+            width="1200" height="900"
             loading="lazy"
             decoding="async">
         </div>
@@ -249,10 +224,6 @@
 
         <!-- Screen-reader announcement for basket changes. -->
         <p class="eyebrow basket-status" id="basket-status" role="status" aria-live="polite"></p>
-
-        <p class="eyebrow shop-credit">
-          Cover photography from <a href="https://unsplash.com/">Unsplash</a>. Free to use, attribution not required.
-        </p>
       </div>
     </section>
   </main>
@@ -287,9 +258,9 @@
 
         <div class="footer-col">
           <p class="footer-heading">Follow</p>
-          <a href="#">Instagram</a>
-          <a href="#">Facebook</a>
-          <a href="#">Twitter / X</a>
+          <a href="https://www.instagram.com/thepapertrailbooks" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.facebook.com/thepapertrailbooks" target="_blank" rel="noopener">Facebook</a>
+          <a href="https://x.com/papertrailbooks" target="_blank" rel="noopener">Twitter / X</a>
         </div>
       </div>
 
@@ -300,6 +271,7 @@
     </div>
   </footer>
 
+  <script src="script.js"></script>
   <script src="shop.js"></script>
 </body>
 </html>
