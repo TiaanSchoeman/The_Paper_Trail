@@ -296,6 +296,10 @@ button {
   margin-top: var(--space-2);
 }
 
+.story-image {
+  aspect-ratio: 3 / 4;
+}
+
 .new-releases {
   padding: var(--space-6) 0;
   border-bottom: 1px solid var(--color-border);
