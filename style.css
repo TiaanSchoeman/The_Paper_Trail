@@ -297,11 +297,6 @@ button {
 }
 
 .story-image {
-
-  /* Using the provided Rotten Tomatoes page URL. This is not a direct image URL
-     and may not display as expected in browsers. For best results provide a
-     direct image file URL (ends with .jpg/.png/.webp) or add the image to the
-     repo and reference that path. */
   background-image: url("https://www.rottentomatoes.com/celebrity/rosemary_lane/pictures");
   background-size: cover;
   background-position: center;
