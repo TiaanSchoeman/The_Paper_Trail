@@ -16,18 +16,11 @@
  * --card-color block with the title and author set over it, which is exactly
  * how the homepage previews look. Nothing ever renders as a broken image.
  *
- * Expected files (any of .jpg, .png or .webp — update coverFile to match):
- *   images/covers/intermezzo.jpg
- *   images/covers/james.jpg
- *   images/covers/the-serviceberry.jpg
- *   images/covers/witch.jpg
- *   images/covers/orbital.jpg
- *   images/covers/the-safekeep.jpg
- *   images/covers/held.jpg
- *
- * "A Thousand Small Returns" is our own invented title from the Author Evening
- * on the homepage, so no real cover exists. It has no coverFile and stays a
- * colour block on purpose.
+ * The eight files currently in images/covers/ are typographic placeholders,
+ * generated to match the colour and layout of the homepage cards. They are
+ * stand-ins, not the publishers' artwork. Replacing one is a matter of
+ * overwriting the file — no code change, as long as the filename stays.
+ * See images/covers/README.md for the filename table and sizing.
  */
 
 (function () {
@@ -73,13 +66,12 @@
       coverFile: "witch.jpg"
     },
     {
-      // Invented for the site. No cover file, so this one stays a colour block.
       title: "A Thousand Small Returns",
       author: "Naledi Mokoena",
       priceCents: 31000,
       inStock: true,
       cover: "#7a3b22",
-      coverFile: null
+      coverFile: "a-thousand-small-returns.jpg"
     },
     {
       title: "Orbital",
