@@ -9,18 +9,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap">
-
-  <!-- Person 1's shared stylesheet (feature-foundation). -->
   <link rel="stylesheet" href="style.css">
 
   <style>
-    /* ---------------------------------------------------------------------
-       Page-specific only. style.css already defines .book-grid, .book-card,
-       .book-cover and the --card-color custom property. What it does not
-       define is a price row, a stock label or an add-to-cart button, because
-       the homepage only previews covers. Those are added here, scoped to
-       .page-shop so the homepage grid is untouched.
-    --------------------------------------------------------------------- */
 
     .page-shop .hero {
       padding-bottom: var(--space-5);
@@ -35,9 +26,9 @@
       margin-top: var(--space-4);
     }
 
-    /* Cover artwork. The --card-color block from style.css stays behind the
-       image: it shows while the file loads, and it is what remains if the
-       file is missing, so a card is never blank. */
+    /* Cover art from images/covers/. The --card-color block from style.css
+       stays behind the image, so a missing file falls back to the flat colour
+       cover from the homepage rather than a broken image. */
     .page-shop .book-cover {
       position: relative;
       overflow: hidden;
@@ -52,26 +43,24 @@
       transition: transform 0.4s ease;
     }
 
-    .page-shop .book-card:hover .book-cover-img {
-      transform: scale(1.04);
-    }
-
-    /* shop.js adds .has-cover only once the image has actually loaded. The
-       artwork already carries the title and author, so the overlay text is
-       hidden rather than printed on top of it. No file means no class, and
-       the text stays over the colour block. */
-    .page-shop .book-cover.has-cover .book-cover-title,
-    .page-shop .book-cover.has-cover .book-cover-author {
-      display: none;
-    }
-
     .page-shop .book-cover-title,
     .page-shop .book-cover-author {
       position: relative;
       z-index: 1;
     }
 
-    /* Shop hero image, mirroring the homepage story block. */
+    /* .has-cover is added by shop.js only after the file actually loads. A real
+       cover already carries its own title and author artwork, so the overlay
+       text would be printing it twice. No file, no class, text stays. */
+    .page-shop .book-cover.has-cover .book-cover-title,
+    .page-shop .book-cover.has-cover .book-cover-author {
+      display: none;
+    }
+
+    .page-shop .book-card:hover .book-cover-img {
+      transform: scale(1.04);
+    }
+
     .page-shop .shop-hero-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -136,8 +125,6 @@
       text-align: center;
     }
 
-    /* Disabled needs its own rule: .btn-primary sets a solid green background
-       that would otherwise make an unusable button look clickable. */
     .page-shop .btn-add:disabled {
       background: transparent;
       border: 1px solid var(--color-border);
@@ -147,6 +134,17 @@
 
     .page-shop .btn-add:disabled:hover {
       background: transparent;
+    }
+
+    .page-shop .basket-count {
+      display: inline-block;
+      min-width: 1.25rem;
+      padding: 0 0.35rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.22);
+      font-family: "JetBrains Mono", "Courier New", monospace;
+      font-size: 0.75rem;
+      text-align: center;
     }
 
     .page-shop .basket-status {
@@ -164,25 +162,20 @@
         <span class="logo-sub">Booksellers since 1998</span>
       </a>
 
-      <button class="nav-toggle" type="button" aria-label="Menu"
-              aria-expanded="false" aria-controls="main-nav">
-        <span></span><span></span><span></span>
-      </button>
-
-      <nav class="main-nav" id="main-nav" aria-label="Primary">
+      <nav class="main-nav" aria-label="Main">
         <a href="index.html">Home</a>
         <a href="events.html">What's On</a>
         <a href="shop.html" class="active" aria-current="page">Shop</a>
         <a href="contact.html">Contact</a>
       </nav>
 
-      <button class="btn-basket" type="button" aria-label="View basket">
+      <button class="btn-basket" type="button">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
           <path d="M3 6h18"></path>
           <path d="M16 10a4 4 0 0 1-8 0"></path>
         </svg>
-        Basket <span class="basket-count" id="basket-count" data-basket-count>0</span>
+        Basket <span class="basket-count" id="basket-count">0</span>
       </button>
     </div>
   </header>
@@ -201,13 +194,15 @@
           </p>
         </div>
 
+        <!-- Drop a photo of the shop floor in as images/shop-hero.jpg. Until
+             it exists, the gradient on .shop-hero-image shows through. -->
         <div class="shop-hero-image">
           <img
             src="images/shop-hero.jpg"
-            alt="Filled bookshelves running the length of the shop."
-            width="1200" height="900"
+            alt="Shelves on the shop floor at The Paper Trail."
             loading="lazy"
-            decoding="async">
+            decoding="async"
+            onerror="this.remove()">
         </div>
       </div>
     </section>
@@ -258,9 +253,9 @@
 
         <div class="footer-col">
           <p class="footer-heading">Follow</p>
-          <a href="https://www.instagram.com/thepapertrailbooks" target="_blank" rel="noopener">Instagram</a>
-          <a href="https://www.facebook.com/thepapertrailbooks" target="_blank" rel="noopener">Facebook</a>
-          <a href="https://x.com/papertrailbooks" target="_blank" rel="noopener">Twitter / X</a>
+          <a href="#">Instagram</a>
+          <a href="#">Facebook</a>
+          <a href="#">Twitter / X</a>
         </div>
       </div>
 
@@ -271,7 +266,6 @@
     </div>
   </footer>
 
-  <script src="script.js"></script>
   <script src="shop.js"></script>
 </body>
 </html>
