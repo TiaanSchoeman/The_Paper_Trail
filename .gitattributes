@@ -1,0 +1,8 @@
+# Normalise line endings so the working tree stops showing every file as fully rewritten.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary

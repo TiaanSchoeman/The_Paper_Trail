@@ -1,9 +1,10 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en-ZA">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact — The Paper Trail</title>
+  <meta name="description" content="Find The Paper Trail at 14 Rosemary Lane, Old Town. Opening hours, phone, email and an enquiry form for orders, events and general questions.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -18,16 +19,21 @@
         <span class="logo-title">The Paper Trail</span>
         <span class="logo-sub">Booksellers Since 1998</span>
       </a>
-      <nav class="main-nav">
+      <button class="nav-toggle" type="button" aria-label="Menu"
+              aria-expanded="false" aria-controls="main-nav">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="main-nav" id="main-nav" aria-label="Primary">
         <a href="index.html">Home</a>
         <a href="events.html">What's On</a>
         <a href="shop.html">Shop</a>
         <a href="contact.html" class="active">Contact</a>
       </nav>
-      <a href="basket.html" class="btn-basket">
+      <button class="btn-basket" type="button" aria-label="View basket">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        Basket
-      </a>
+        Basket <span class="basket-count" data-basket-count>0</span>
+      </button>
     </div>
   </header>
 
@@ -53,7 +59,7 @@
         <div class="section-head">
           <div>
             <p class="eyebrow eyebrow-teal">Get In Touch</p>
-            <h2>Contact</h2>
+            <h1>Contact</h1>
           </div>
         </div>
 
@@ -101,7 +107,7 @@
       </div>
       <div class="footer-col">
         <p class="footer-heading">Explore</p>
-        <a href="whats-on.html">What's On</a>
+        <a href="events.html">What's On</a>
         <a href="shop.html">Shop</a>
         <a href="contact.html">Contact</a>
       </div>
@@ -116,6 +122,7 @@
     </div>
   </footer>
 
+  <script src="script.js"></script>
   <script src="contact.js"></script>
 </body>
 </html>
