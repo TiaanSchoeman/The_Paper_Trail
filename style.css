@@ -297,10 +297,17 @@ button {
 }
 
 .story-image {
-  border-radius: var(--radius);
-  overflow: hidden;
-  aspect-ratio: 4 / 3;
-  background: linear-gradient(135deg, #caa06a 0%, #8a5a34 55%, #4a3320 100%);
+
+  /* Using the provided Rotten Tomatoes page URL. This is not a direct image URL
+     and may not display as expected in browsers. For best results provide a
+     direct image file URL (ends with .jpg/.png/.webp) or add the image to the
+     repo and reference that path. */
+  background-image: url("https://www.rottentomatoes.com/celebrity/rosemary_lane/pictures");
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 400px;
+
 }
 
 .new-releases {
