@@ -35,6 +35,89 @@
       margin-top: var(--space-4);
     }
 
+    /* Photo covers. The --card-color block from style.css stays behind the
+       image: it shows while the photo loads, and it is what remains if the
+       photo fails, so a card is never blank. */
+    .page-shop .book-cover {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-shop .book-cover-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    /* Darkens the photo so the white serif title stays legible over any image.
+       Sits between the photo and the text, hence the z-index on both. */
+    .page-shop .book-cover::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.55) 0%,
+        rgba(0, 0, 0, 0.25) 45%,
+        rgba(0, 0, 0, 0.75) 100%
+      );
+    }
+
+    .page-shop .book-cover-title,
+    .page-shop .book-cover-author,
+    .page-shop .book-cover-credit {
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-shop .book-card:hover .book-cover-img {
+      transform: scale(1.04);
+    }
+
+    .page-shop .book-cover-credit {
+      position: absolute;
+      right: var(--space-2);
+      bottom: var(--space-1);
+      font-size: 0.6rem;
+      letter-spacing: 0.06em;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .page-shop .shop-credit {
+      margin-top: var(--space-4);
+      text-align: right;
+    }
+
+    /* Shop hero image, mirroring the homepage story block. */
+    .page-shop .shop-hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-5);
+      align-items: center;
+    }
+
+    .page-shop .shop-hero-image {
+      border-radius: var(--radius);
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      background: linear-gradient(135deg, #caa06a 0%, #8a5a34 55%, #4a3320 100%);
+    }
+
+    .page-shop .shop-hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    @media (max-width: 900px) {
+      .page-shop .shop-hero-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .page-shop .book-meta {
       display: flex;
       align-items: baseline;
@@ -132,15 +215,25 @@
 
   <main>
     <section class="hero">
-      <div class="container">
-        <p class="eyebrow">14 Rosemary Lane &middot; Old Town &middot; Since 1998</p>
-        <h1 class="hero-title">The Shelves</h1>
-        <p class="hero-sub">Booksellers since 1998</p>
-        <hr class="hero-divider">
-        <p class="hero-tagline">
-          What we stock is what we love: literary fiction, poetry that risks something,
-          non-fiction that reads like a novel.
-        </p>
+      <div class="container shop-hero-grid">
+        <div>
+          <p class="eyebrow">14 Rosemary Lane &middot; Old Town &middot; Since 1998</p>
+          <h1 class="hero-title">The Shelves</h1>
+          <p class="hero-sub">Booksellers since 1998</p>
+          <hr class="hero-divider">
+          <p class="hero-tagline">
+            What we stock is what we love: literary fiction, poetry that risks something,
+            non-fiction that reads like a novel.
+          </p>
+        </div>
+
+        <div class="shop-hero-image">
+          <img
+            src="https://images.unsplash.com/photo-1521123845560-14093637aa7d?auto=format&amp;fit=crop&amp;w=1000&amp;q=70"
+            alt="A reader holding an open paperback."
+            loading="lazy"
+            decoding="async">
+        </div>
       </div>
     </section>
 
@@ -156,6 +249,10 @@
 
         <!-- Screen-reader announcement for basket changes. -->
         <p class="eyebrow basket-status" id="basket-status" role="status" aria-live="polite"></p>
+
+        <p class="eyebrow shop-credit">
+          Cover photography from <a href="https://unsplash.com/">Unsplash</a>. Free to use, attribution not required.
+        </p>
       </div>
     </section>
   </main>
