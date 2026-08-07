@@ -456,10 +456,12 @@ button {
 }
 
 .newsletter-message {
-  margin-top: var(--space-2);
   font-size: 0.85rem;
   color: #a9d8b8;
-  min-height: 1.2em;
+}
+
+.newsletter-message:not(:empty) {
+  margin-top: var(--space-2);
 }
 
 .newsletter-message.error {
