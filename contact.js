@@ -1,14 +1,4 @@
-﻿/* =========================================================
-   THE PAPER TRAIL — contact.js
-   Owner: Contact / Newsletter page
-   Handles: client-side validation for the Contact form
-   (name, email, message) — required fields + email format,
-   with preventDefault() intercepting submission per the
-   sprint's technical spec. No backend yet (MVP scope), so a
-   successful submission just resets the form and confirms.
-   ========================================================= */
-
-document.addEventListener("DOMContentLoaded", initContactForm);
+﻿document.addEventListener("DOMContentLoaded", initContactForm);
 
 function initContactForm() {
   const form = document.getElementById("contact-form");
@@ -60,12 +50,10 @@ function initContactForm() {
       return;
     }
 
-    // MVP scope: no backend/API call yet — confirm locally and reset.
     setStatus(`Thanks, ${name} — we've got your message and will reply soon.`, false);
     form.reset();
   });
 
-  // Clear a field's error state as soon as the person starts fixing it.
   [nameInput, emailInput, messageInput].forEach((input) => {
     input.addEventListener("input", () => {
       input.classList.remove("error");

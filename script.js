@@ -1,28 +1,14 @@
-/* =========================================================
-   THE PAPER TRAIL — script.js
-   Owner: Person 1 (Foundation & Homepage)
-   Handles: scroll-reveal animation for homepage sections,
-   and the homepage newsletter sign-up form (footer/dark
-   section). Contact page validation lives separately in
-   contact.js — this file only covers what index.html uses.
-   ========================================================= */
-
 document.addEventListener("DOMContentLoaded", () => {
   initScrollReveal();
   initNewsletterForm();
 });
 
-/**
- * Fades + slides sections into view as the user scrolls,
- * using IntersectionObserver so it's cheap and doesn't run
- * on every scroll event.
- */
 function initScrollReveal() {
   const revealEls = document.querySelectorAll(".reveal");
 
   if (!revealEls.length) return;
 
-  // Respect users who've asked for reduced motion.
+
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)"
   ).matches;
@@ -47,12 +33,7 @@ function initScrollReveal() {
   revealEls.forEach((el) => observer.observe(el));
 }
 
-/**
- * Validates and "submits" the homepage newsletter sign-up.
- * No backend yet (per the sprint's MVP scope) — this checks
- * the email format client-side and shows an inline message,
- * matching the validation pattern used on the Contact page.
- */
+
 function initNewsletterForm() {
   const form = document.getElementById("newsletter-form");
   if (!form) return;
