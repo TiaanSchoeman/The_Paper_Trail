@@ -99,8 +99,6 @@
     }
   ];
 
-  var basketCount = 0;
-
   /* --- Helpers -------------------------------------------------------- */
 
   var priceFormatter = new Intl.NumberFormat("en-ZA", {
@@ -124,18 +122,26 @@
     return node;
   }
 
-  function updateBasket(title) {
-    basketCount += 1;
+  // The basket lives in script.js so the count survives navigation and every
+  // page header shows the same number. Falls back to a local counter if
+  // script.js has not loaded.
+  var localCount = 0;
 
+  function updateBasket(title) {
+    if (window.PaperTrail && window.PaperTrail.basket) {
+      window.PaperTrail.basket.add(title);
+      return;
+    }
+
+    localCount += 1;
     var counter = document.getElementById("basket-count");
     var status = document.getElementById("basket-status");
-
     if (counter) {
-      counter.textContent = String(basketCount);
+      counter.textContent = String(localCount);
     }
     if (status) {
-      status.textContent = title + " added. " + basketCount + " item" +
-        (basketCount === 1 ? "" : "s") + " in basket.";
+      status.textContent = title + " added. " + localCount + " item" +
+        (localCount === 1 ? "" : "s") + " in basket.";
     }
   }
 
