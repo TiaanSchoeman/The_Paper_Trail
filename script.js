@@ -42,7 +42,7 @@ function initNewsletterForm() {
   const message = document.getElementById("newsletter-message");
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const value = input.value.trim();
@@ -60,8 +60,24 @@ function initNewsletterForm() {
     }
 
     input.classList.remove("error");
-    showMessage("Thanks — you're on the list.", false);
-    form.reset();
+
+    const submitBtn = form.querySelector("button[type='submit']");
+    if (submitBtn) submitBtn.disabled = true;
+
+    try {
+      await signUpNewsletter(value);
+      showMessage("Thanks — you're on the list.", false);
+      form.reset();
+    } catch (err) {
+      if (err && err.code === "23505") {
+        showMessage("That email's already signed up.", true);
+      } else {
+        console.error(err);
+        showMessage("Something went wrong — try again.", true);
+      }
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
+    }
   });
 
   input.addEventListener("input", () => {
