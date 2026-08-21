@@ -1,48 +1,14 @@
 <!DOCTYPE html>
-<html lang="en-ZA">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Paper Trail — Booksellers Since 1998</title>
-  <meta name="description" content="An independent bookshop at 14 Rosemary Lane, Old Town, selling literary fiction, poetry and non-fiction since 1998, and hosting readings three nights a week.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-
-  <style>
-    /* ---------------------------------------------------------------------
-       Page-specific only, scoped to .page-home. Mirrors the .book-cover-img /
-       .has-cover pattern already used on the shop page, so the "New This
-       Week" preview matches the real shop covers instead of staying flat
-       colour once the shop page has photos and this one doesn't.
-    --------------------------------------------------------------------- */
-
-    .page-home .book-cover {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .page-home .book-cover-img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .page-home .book-cover-title,
-    .page-home .book-cover-author {
-      position: relative;
-      z-index: 1;
-    }
-
-    .page-home .book-cover.has-cover .book-cover-title,
-    .page-home .book-cover.has-cover .book-cover-author {
-      display: none;
-    }
-  </style>
 </head>
-<body class="page-home">
+<body>
 
   <header class="site-header">
     <div class="container header-inner">
@@ -51,31 +17,25 @@
         <span class="logo-sub">Booksellers since 1998</span>
       </a>
 
-      <button class="nav-toggle" type="button" aria-label="Menu"
-              aria-expanded="false" aria-controls="main-nav">
-        <span></span><span></span><span></span>
-      </button>
-
-      <nav class="main-nav" id="main-nav" aria-label="Primary">
-        <a href="index.html" class="active" aria-current="page">Home</a>
+      <nav class="main-nav" aria-label="Primary">
+        <a href="index.html" class="active">Home</a>
         <a href="events.html">What's On</a>
         <a href="shop.html">Shop</a>
         <a href="contact.html">Contact</a>
       </nav>
 
-      <button id="basketBtn" class="btn-basket" type="button" aria-label="View basket">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <a id="basketBtn" class="btn-basket" href="basket.html" aria-label="View basket">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M6 6h15l-1.5 9h-12z"/>
           <circle cx="9" cy="20" r="1"/>
           <circle cx="18" cy="20" r="1"/>
           <path d="M6 6L4 3H2"/>
         </svg>
-        Basket <span class="basket-count" data-basket-count>0</span>
-      </button>
+        Basket <span class="basket-count" id="basket-count">0</span>
+      </a>
     </div>
   </header>
 
-  <main>
   <section class="hero">
     <div class="container">
       <p class="eyebrow">14 Rosemary Lane &middot; Old Town &middot; Since 1998</p>
@@ -101,11 +61,8 @@
         <a href="contact.html" class="link-arrow">Find us &rarr;</a>
       </div>
       <div class="story-image">
-        <!-- Temporary Unsplash hot-link (Pickawood, Unsplash License, no attribution
-             required). Breaks the "never hot-linked" rule in CLAUDE.md — replace with
-             a committed file at images/story-shelf.jpg before this is submitted. -->
         <img
-            src="https://images.unsplash.com/photo-1593430980369-68efc5a5eb34?w=1200&q=80&auto=format&fit=crop"
+            src="images/story-shelf.jpg"
             alt="Shelves of books at The Paper Trail."
             loading="lazy"
             decoding="async">
@@ -121,17 +78,8 @@
       </div>
 
       <div class="book-grid">
-        <!-- Same temporary Unsplash hot-links as the matching books in shop.js,
-             kept in sync by hand since this markup is static, not JS-built.
-             See CLAUDE.md "Known state" for the swap-back-to-local plan. -->
         <article class="book-card" style="--card-color:#2f4f3b">
           <div class="book-cover">
-            <img class="book-cover-img"
-                 src="https://images.unsplash.com/photo-1626657171364-4af23203469b?w=800&q=80&auto=format&fit=crop"
-                 alt="Cover of Intermezzo by Sally Rooney"
-                 loading="lazy" decoding="async"
-                 onload="this.parentElement.classList.add('has-cover')"
-                 onerror="this.remove()">
             <span class="book-cover-title">Intermezzo</span>
             <span class="book-cover-author">Sally Rooney</span>
           </div>
@@ -141,12 +89,6 @@
 
         <article class="book-card" style="--card-color:#1c3049">
           <div class="book-cover">
-            <img class="book-cover-img"
-                 src="https://images.unsplash.com/photo-1776766848535-7f94d9cb152c?w=800&q=80&auto=format&fit=crop"
-                 alt="Cover of James by Percival Everett"
-                 loading="lazy" decoding="async"
-                 onload="this.parentElement.classList.add('has-cover')"
-                 onerror="this.remove()">
             <span class="book-cover-title">James</span>
             <span class="book-cover-author">Percival Everett</span>
           </div>
@@ -156,12 +98,6 @@
 
         <article class="book-card" style="--card-color:#4b6b34">
           <div class="book-cover">
-            <img class="book-cover-img"
-                 src="https://images.unsplash.com/photo-1768771463712-39c53a5b5ff8?w=800&q=80&auto=format&fit=crop"
-                 alt="Cover of The Serviceberry by Robin Wall Kimmerer"
-                 loading="lazy" decoding="async"
-                 onload="this.parentElement.classList.add('has-cover')"
-                 onerror="this.remove()">
             <span class="book-cover-title">The Serviceberry</span>
             <span class="book-cover-author">Robin Wall Kimmerer</span>
           </div>
@@ -171,12 +107,6 @@
 
         <article class="book-card" style="--card-color:#402a5c">
           <div class="book-cover">
-            <img class="book-cover-img"
-                 src="https://images.unsplash.com/photo-1603531763662-109ff15864c0?w=800&q=80&auto=format&fit=crop"
-                 alt="Cover of Witch by Rebecca Tam&aacute;s"
-                 loading="lazy" decoding="async"
-                 onload="this.parentElement.classList.add('has-cover')"
-                 onerror="this.remove()">
             <span class="book-cover-title">Witch</span>
             <span class="book-cover-author">Rebecca Tam&aacute;s</span>
           </div>
@@ -196,21 +126,21 @@
 
       <div class="event-grid">
         <article class="event-card">
-          <p class="event-date"><time datetime="2026-08-12T19:00">Wed 12 Aug</time></p>
+          <p class="event-date">Tue 12 Aug</p>
           <h3>Poetry Slam</h3>
           <p class="event-host">Hosted by Rosalind Achebe</p>
           <p>An open-mic evening of original poetry — seasoned voices and first-timers alike. Bring a poem or just your ears.</p>
         </article>
 
         <article class="event-card">
-          <p class="event-date"><time datetime="2026-08-14T18:30">Fri 14 Aug</time></p>
+          <p class="event-date">Thu 14 Aug</p>
           <h3>Author Evening — Naledi Mokoena</h3>
           <p class="event-host">Hosted by The Paper Trail team</p>
           <p>Naledi reads from her debut novel, A Thousand Small Returns, in conversation with our booksellers. Books on sale.</p>
         </article>
 
         <article class="event-card">
-          <p class="event-date"><time datetime="2026-08-18T19:00">Tue 18 Aug</time></p>
+          <p class="event-date">Mon 18 Aug</p>
           <h3>Translation Night</h3>
           <p class="event-host">Hosted by Dr Yusuf Hartmann</p>
           <p>A celebration of literature across five languages — readings, discussion, and a tasting flight of short fiction.</p>
@@ -232,8 +162,6 @@
       <p class="newsletter-message" id="newsletter-message" aria-live="polite"></p>
     </div>
   </section>
-
-  </main>
 
   <footer class="site-footer">
     <div class="container footer-grid">
@@ -259,9 +187,9 @@
 
       <div class="footer-col">
         <p class="footer-heading">Follow</p>
-        <a href="https://www.instagram.com/thepapertrailbooks" target="_blank" rel="noopener">Instagram</a>
-        <a href="https://www.facebook.com/thepapertrailbooks" target="_blank" rel="noopener">Facebook</a>
-        <a href="https://x.com/papertrailbooks" target="_blank" rel="noopener">Twitter / X</a>
+        <a href="#" target="_blank" rel="noopener">Instagram</a>
+        <a href="#" target="_blank" rel="noopener">Facebook</a>
+        <a href="#" target="_blank" rel="noopener">Twitter / X</a>
       </div>
     </div>
 

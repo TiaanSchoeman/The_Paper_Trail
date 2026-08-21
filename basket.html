@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Basket — The Paper Trail</title>
+  <meta name="description" content="Your basket at The Paper Trail, 14 Rosemary Lane, Old Town.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .page-basket .basket-section {
+      padding: var(--space-5) 0 var(--space-6);
+    }
+
+    .page-basket .basket-list {
+      list-style: none;
+      margin: var(--space-4) 0;
+      padding: 0;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .page-basket .basket-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto auto;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3) 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .page-basket .basket-row h3 {
+      font-size: 1.05rem;
+      margin: 0 0 0.2rem;
+    }
+
+    .page-basket .basket-row p {
+      margin: 0;
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+    }
+
+    .page-basket .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    .page-basket .qty-controls button {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--color-border);
+      background: transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .page-basket .qty-controls button:hover {
+      background: var(--color-bg-alt);
+    }
+
+    .page-basket .line-total {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.95rem;
+      min-width: 6ch;
+      text-align: right;
+    }
+
+    .page-basket .btn-remove {
+      background: transparent;
+      border: none;
+      color: var(--color-rust);
+      cursor: pointer;
+      font-size: 0.8rem;
+      text-decoration: underline;
+      padding: 0;
+    }
+
+    .page-basket .basket-empty {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.25rem;
+      color: #4a453c;
+      padding: var(--space-4) 0;
+    }
+
+    .page-basket .basket-summary {
+      margin-top: var(--space-4);
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .page-basket .summary-box {
+      width: 100%;
+      max-width: 340px;
+    }
+
+    .page-basket .summary-line {
+      display: flex;
+      justify-content: space-between;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 1rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .page-basket .checkout-form {
+      margin-top: var(--space-3);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .page-basket .checkout-form input {
+      padding: 0.7rem 0.85rem;
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      border: 1px solid var(--color-border);
+      border-radius: 2px;
+      background: var(--color-bg);
+      color: var(--color-text);
+    }
+
+    .page-basket .checkout-form input:focus {
+      outline: 2px solid var(--color-green);
+      outline-offset: 1px;
+    }
+
+    .page-basket .checkout-status {
+      margin-top: var(--space-2);
+      font-size: 0.9rem;
+      min-height: 1.2em;
+    }
+
+    .page-basket .checkout-status.error {
+      color: var(--color-rust);
+    }
+
+    .page-basket .checkout-status.success {
+      color: var(--color-green);
+    }
+
+    @media (max-width: 640px) {
+      .page-basket .basket-row {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+      .page-basket .line-total {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body class="page-basket">
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">
+        <span class="logo-title">The Paper Trail</span>
+        <span class="logo-sub">Booksellers since 1998</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Main">
+        <a href="index.html">Home</a>
+        <a href="events.html">What's On</a>
+        <a href="shop.html">Shop</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+
+      <a class="btn-basket" href="basket.html" aria-current="page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <path d="M3 6h18"></path>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        Basket <span class="basket-count" id="basket-count">0</span>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">14 Rosemary Lane &middot; Old Town &middot; Since 1998</p>
+        <h1 class="hero-title">Your Basket</h1>
+        <hr class="hero-divider">
+      </div>
+    </section>
+
+    <section class="basket-section">
+      <div class="container">
+        <ul class="basket-list" id="basket-list"></ul>
+
+        <div class="basket-summary" id="basket-summary" hidden>
+          <div class="summary-box">
+            <div class="summary-line">
+              <span>Subtotal</span>
+              <span id="basket-subtotal">R0.00</span>
+            </div>
+
+            <form class="checkout-form" id="checkout-form" novalidate>
+              <input type="text" id="checkout-name" placeholder="Your name" required>
+              <input type="email" id="checkout-email" placeholder="you@example.com" required>
+              <button type="submit" class="btn btn-primary">Place order</button>
+              <p class="checkout-status" id="checkout-status" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <p class="logo-title">The Paper Trail</p>
+          <p class="est">Est. 1998</p>
+          <p>An independent bookshop turning into something else three nights a week, since 1998.</p>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-heading">Visit</p>
+          <a href="contact.html">14 Rosemary Lane</a>
+          <a href="contact.html">Old Town</a>
+          <p>
+            Mon&ndash;Fri 09:00&ndash;18:00<br>
+            Sat 09:00&ndash;16:00<br>
+            Sun Closed
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-heading">Navigate</p>
+          <a href="index.html">Home</a>
+          <a href="events.html">What's On</a>
+          <a href="shop.html">Shop</a>
+          <a href="contact.html">Contact</a>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-heading">Follow</p>
+          <a href="#">Instagram</a>
+          <a href="#">Facebook</a>
+          <a href="#">Twitter / X</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>The Paper Trail &middot; 14 Rosemary Lane &middot; Old Town &middot; Est. 1998</p>
+        <p>&copy; 2026 The Paper Trail. Independently set and printed in Old Town.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="supabase-client.js"></script>
+  <script src="basket.js"></script>
+</body>
+</html>

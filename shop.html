@@ -26,7 +26,7 @@
       margin-top: var(--space-4);
     }
 
-    /* Cover art from Unsplash (see shop.js). The --card-color block from style.css
+    /* Cover art from images/covers/. The --card-color block from style.css
        stays behind the image, so a missing file falls back to the flat colour
        cover from the homepage rather than a broken image. */
     .page-shop .book-cover {
@@ -162,26 +162,21 @@
         <span class="logo-sub">Booksellers since 1998</span>
       </a>
 
-      <button class="nav-toggle" type="button" aria-label="Menu"
-              aria-expanded="false" aria-controls="main-nav">
-        <span></span><span></span><span></span>
-      </button>
-
-      <nav class="main-nav" id="main-nav" aria-label="Main">
+      <nav class="main-nav" aria-label="Main">
         <a href="index.html">Home</a>
         <a href="events.html">What's On</a>
         <a href="shop.html" class="active" aria-current="page">Shop</a>
         <a href="contact.html">Contact</a>
       </nav>
 
-      <button class="btn-basket" type="button">
+      <a class="btn-basket" href="basket.html">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
           <path d="M3 6h18"></path>
           <path d="M16 10a4 4 0 0 1-8 0"></path>
         </svg>
-        Basket <span class="basket-count" id="basket-count" data-basket-count>0</span>
-      </button>
+        Basket <span class="basket-count" id="basket-count">0</span>
+      </a>
     </div>
   </header>
 
@@ -199,12 +194,11 @@
           </p>
         </div>
 
-        <!-- Temporary Unsplash hot-link (Philipp Hubert, Unsplash License, no
-             attribution required). Breaks the "never hot-linked" rule in CLAUDE.md —
-             replace with a committed file at images/shop-hero.jpg before submission. -->
+        <!-- Drop a photo of the shop floor in as images/shop-hero.jpg. Until
+             it exists, the gradient on .shop-hero-image shows through. -->
         <div class="shop-hero-image">
           <img
-            src="https://images.unsplash.com/photo-1760106782590-bb02f861cbc7?w=1200&q=80&auto=format&fit=crop"
+            src="images/shop-hero.jpg"
             alt="Shelves on the shop floor at The Paper Trail."
             loading="lazy"
             decoding="async"
@@ -259,9 +253,9 @@
 
         <div class="footer-col">
           <p class="footer-heading">Follow</p>
-          <a href="https://www.instagram.com/thepapertrailbooks" target="_blank" rel="noopener">Instagram</a>
-          <a href="https://www.facebook.com/thepapertrailbooks" target="_blank" rel="noopener">Facebook</a>
-          <a href="https://x.com/papertrailbooks" target="_blank" rel="noopener">Twitter / X</a>
+          <a href="#">Instagram</a>
+          <a href="#">Facebook</a>
+          <a href="#">Twitter / X</a>
         </div>
       </div>
 
@@ -272,7 +266,8 @@
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="supabase-client.js"></script>
   <script src="shop.js"></script>
 </body>
 </html>

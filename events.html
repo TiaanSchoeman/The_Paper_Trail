@@ -191,26 +191,21 @@
         <span class="logo-sub">Booksellers since 1998</span>
       </a>
 
-      <button class="nav-toggle" type="button" aria-label="Menu"
-              aria-expanded="false" aria-controls="main-nav">
-        <span></span><span></span><span></span>
-      </button>
-
-      <nav class="main-nav" id="main-nav" aria-label="Primary">
+      <nav class="main-nav" aria-label="Main">
         <a href="index.html">Home</a>
         <a href="events.html" class="active" aria-current="page">What's On</a>
         <a href="shop.html">Shop</a>
         <a href="contact.html">Contact</a>
       </nav>
 
-      <button class="btn-basket" type="button" aria-label="View basket">
+      <a class="btn-basket" href="basket.html">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
           <path d="M3 6h18"></path>
           <path d="M16 10a4 4 0 0 1-8 0"></path>
         </svg>
-        Basket <span class="basket-count" data-basket-count>0</span>
-      </button>
+        Basket <span class="basket-count" id="basket-count">0</span>
+      </a>
     </div>
   </header>
 
@@ -322,9 +317,9 @@
 
         <div class="footer-col">
           <p class="footer-heading">Follow</p>
-          <a href="https://www.instagram.com/thepapertrailbooks" target="_blank" rel="noopener">Instagram</a>
-          <a href="https://www.facebook.com/thepapertrailbooks" target="_blank" rel="noopener">Facebook</a>
-          <a href="https://x.com/papertrailbooks" target="_blank" rel="noopener">Twitter / X</a>
+          <a href="#">Instagram</a>
+          <a href="#">Facebook</a>
+          <a href="#">Twitter / X</a>
         </div>
       </div>
 
@@ -335,6 +330,8 @@
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="supabase-client.js"></script>
   <script src="script.js"></script>
   <script src="events.js"></script>
 </body>
