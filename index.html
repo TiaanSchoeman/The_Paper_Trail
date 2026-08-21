@@ -8,8 +8,41 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* ---------------------------------------------------------------------
+       Page-specific only, scoped to .page-home. Mirrors the .book-cover-img /
+       .has-cover pattern already used on the shop page, so the "New This
+       Week" preview matches the real shop covers instead of staying flat
+       colour once the shop page has photos and this one doesn't.
+    --------------------------------------------------------------------- */
+
+    .page-home .book-cover {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-home .book-cover-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .page-home .book-cover-title,
+    .page-home .book-cover-author {
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-home .book-cover.has-cover .book-cover-title,
+    .page-home .book-cover.has-cover .book-cover-author {
+      display: none;
+    }
+  </style>
 </head>
-<body>
+<body class="page-home">
 
   <header class="site-header">
     <div class="container header-inner">
@@ -88,8 +121,17 @@
       </div>
 
       <div class="book-grid">
+        <!-- Same temporary Unsplash hot-links as the matching books in shop.js,
+             kept in sync by hand since this markup is static, not JS-built.
+             See CLAUDE.md "Known state" for the swap-back-to-local plan. -->
         <article class="book-card" style="--card-color:#2f4f3b">
           <div class="book-cover">
+            <img class="book-cover-img"
+                 src="https://images.unsplash.com/photo-1626657171364-4af23203469b?w=800&q=80&auto=format&fit=crop"
+                 alt="Cover of Intermezzo by Sally Rooney"
+                 loading="lazy" decoding="async"
+                 onload="this.parentElement.classList.add('has-cover')"
+                 onerror="this.remove()">
             <span class="book-cover-title">Intermezzo</span>
             <span class="book-cover-author">Sally Rooney</span>
           </div>
@@ -99,6 +141,12 @@
 
         <article class="book-card" style="--card-color:#1c3049">
           <div class="book-cover">
+            <img class="book-cover-img"
+                 src="https://images.unsplash.com/photo-1776766848535-7f94d9cb152c?w=800&q=80&auto=format&fit=crop"
+                 alt="Cover of James by Percival Everett"
+                 loading="lazy" decoding="async"
+                 onload="this.parentElement.classList.add('has-cover')"
+                 onerror="this.remove()">
             <span class="book-cover-title">James</span>
             <span class="book-cover-author">Percival Everett</span>
           </div>
@@ -108,6 +156,12 @@
 
         <article class="book-card" style="--card-color:#4b6b34">
           <div class="book-cover">
+            <img class="book-cover-img"
+                 src="https://images.unsplash.com/photo-1768771463712-39c53a5b5ff8?w=800&q=80&auto=format&fit=crop"
+                 alt="Cover of The Serviceberry by Robin Wall Kimmerer"
+                 loading="lazy" decoding="async"
+                 onload="this.parentElement.classList.add('has-cover')"
+                 onerror="this.remove()">
             <span class="book-cover-title">The Serviceberry</span>
             <span class="book-cover-author">Robin Wall Kimmerer</span>
           </div>
@@ -117,6 +171,12 @@
 
         <article class="book-card" style="--card-color:#402a5c">
           <div class="book-cover">
+            <img class="book-cover-img"
+                 src="https://images.unsplash.com/photo-1603531763662-109ff15864c0?w=800&q=80&auto=format&fit=crop"
+                 alt="Cover of Witch by Rebecca Tam&aacute;s"
+                 loading="lazy" decoding="async"
+                 onload="this.parentElement.classList.add('has-cover')"
+                 onerror="this.remove()">
             <span class="book-cover-title">Witch</span>
             <span class="book-cover-author">Rebecca Tam&aacute;s</span>
           </div>
