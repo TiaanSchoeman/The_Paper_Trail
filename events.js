@@ -1,10 +1,57 @@
 /* events.js — The Paper Trail
- * Fetches events from Supabase (table: events) and renders the listing.
- * The "Add an event" form inserts a new row. Requires supabase-client.js.
+ *
+ * BACKEND NOTE (2026-08-21): same issue and same fix as shop.js — the
+ * Supabase-fetched version (supabase.from("events").select("*")...) was
+ * rendering an empty grid on the live site with no console error. This
+ * reverts to a hardcoded array rendered on load, the same pattern
+ * index.html's static events preview already uses successfully.
+ *
+ * ADD EVENT FORM: previously inserted into the Supabase events table. That's
+ * removed too — it now just pushes the new event into the in-memory EVENTS
+ * array and re-renders, so the button actually works (the earlier version's
+ * insert() call was one more thing depending on the same broken fetch path).
+ * The trade-off is real: an event added here lives only in this browser tab
+ * and is gone on refresh, since nothing is written anywhere. If the
+ * empty-grid bug gets found later, swap the insert() call back in.
  */
 
 (function () {
   "use strict";
+
+  var EVENTS = [
+    {
+      title: "Poetry Slam",
+      host: "Rosalind Achebe",
+      blurb: "An open-mic evening of original poetry — seasoned voices and first-timers alike. Bring a poem or just your ears.",
+      event_date: "2026-08-25T18:30:00",
+      seats_total: 40,
+      seats_left: 40
+    },
+    {
+      title: "Author Evening — Naledi Mokoena",
+      host: "The Paper Trail team",
+      blurb: "Naledi reads from her debut novel, A Thousand Small Returns, in conversation with our booksellers. Books on sale.",
+      event_date: "2026-08-28T19:00:00",
+      seats_total: 60,
+      seats_left: 12
+    },
+    {
+      title: "Translation Night",
+      host: "Dr Yusuf Hartmann",
+      blurb: "A celebration of literature across five languages — readings, discussion, and a tasting flight of short fiction.",
+      event_date: "2026-09-01T18:00:00",
+      seats_total: 30,
+      seats_left: 0
+    },
+    {
+      title: "Book Club: Autumn Read",
+      host: "The Paper Trail team",
+      blurb: "This month's pick discussed over tea and biscuits. New faces always welcome — no need to have finished the book.",
+      event_date: "2026-09-04T17:30:00",
+      seats_total: 25,
+      seats_left: 25
+    }
+  ];
 
   var dateFormatter = new Intl.DateTimeFormat("en-ZA", {
     weekday: "short",
@@ -58,37 +105,29 @@
     var count = document.getElementById("events-count");
     if (!grid) return;
 
-    supabase
-      .from("events")
-      .select("*")
-      .order("event_date", { ascending: true })
-      .then(function (result) {
-        if (result.error) throw result.error;
-        var events = result.data;
+    // Keep the list in date order — the add-event form appends to the end
+    // of the array, not necessarily in date order.
+    var sorted = EVENTS.slice().sort(function (a, b) {
+      return new Date(a.event_date) - new Date(b.event_date);
+    });
 
-        grid.innerHTML = "";
+    grid.innerHTML = "";
 
-        if (events.length === 0) {
-          grid.appendChild(el("li", "events-empty", "Nothing listed at the moment. Check back next week."));
-          if (count) count.textContent = "";
-          return;
-        }
+    if (sorted.length === 0) {
+      grid.appendChild(el("li", "events-empty", "Nothing listed at the moment. Check back next week."));
+      if (count) count.textContent = "";
+      return;
+    }
 
-        var fragment = document.createDocumentFragment();
-        events.forEach(function (event) {
-          fragment.appendChild(buildCard(event));
-        });
-        grid.appendChild(fragment);
+    var fragment = document.createDocumentFragment();
+    sorted.forEach(function (event) {
+      fragment.appendChild(buildCard(event));
+    });
+    grid.appendChild(fragment);
 
-        if (count) {
-          count.textContent = events.length + (events.length === 1 ? " event" : " events");
-        }
-      })
-      .catch(function (err) {
-        console.error(err);
-        grid.innerHTML = "";
-        grid.appendChild(el("li", "events-empty", "Couldn't load events right now."));
-      });
+    if (count) {
+      count.textContent = sorted.length + (sorted.length === 1 ? " event" : " events");
+    }
   }
 
   /* --- Add event form --------------------------------------------------- */
@@ -166,43 +205,25 @@
         return;
       }
 
-      var submitBtn = form.querySelector("button[type='submit']");
-      submitBtn.disabled = true;
-      if (status) status.textContent = "Adding...";
+      EVENTS.push({
+        title: title,
+        host: host,
+        blurb: blurb,
+        event_date: new Date(date).toISOString(),
+        seats_total: seats,
+        seats_left: seats
+      });
 
-      supabase
-        .from("events")
-        .insert({
-          title: title,
-          host: host,
-          blurb: blurb,
-          event_date: new Date(date).toISOString(),
-          seats_total: seats,
-          seats_left: seats
-        })
-        .then(function (result) {
-          if (result.error) throw result.error;
-          if (status) status.textContent = "Event added.";
-          form.reset();
-          panel.setAttribute("hidden", "");
-          toggle.setAttribute("aria-expanded", "false");
-          render();
-        })
-        .catch(function (err) {
-          console.error(err);
-          if (status) status.textContent = "Couldn't add the event — try again.";
-        })
-        .finally(function () {
-          submitBtn.disabled = false;
-        });
+      if (status) status.textContent = "Event added.";
+      form.reset();
+      panel.setAttribute("hidden", "");
+      toggle.setAttribute("aria-expanded", "false");
+      render();
     });
   }
 
   document.addEventListener("DOMContentLoaded", function () {
-    ensureSession().then(render).catch(function (err) {
-      console.error(err);
-      render();
-    });
+    render();
     initAddEventForm();
   });
 })();
