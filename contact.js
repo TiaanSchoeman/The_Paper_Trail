@@ -1,199 +1,100 @@
-/* contact.js — The Paper Trail
- *
- * Validation for the enquiry form on contact.html.
- *
- * Uses the same FIELDS table as events.js: each field is one row of
- * {input, error, validate}, and both the submit handler and the live input
- * handler walk the table. Adding a field is one row rather than another
- * if-block, and the error-display logic is written once instead of once per
- * field.
- *
- * There is no backend in this sprint, so the form does not post anywhere.
- * preventDefault stops the reload that would otherwise clear the fields and
- * look like a successful send.
- */
+document.addEventListener("DOMContentLoaded", initContactForm);
 
-(function () {
-  "use strict";
+var FORMSPREE_ENDPOINT = "https://formspree.io/f/maewvawv";
 
-  var EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+function initContactForm() {
+  const form = document.getElementById("contact-form");
+  if (!form) return;
 
-  // Digits, spaces, brackets, hyphens and an optional leading +. Deliberately
-  // loose: phone formats vary and a strict pattern rejects valid numbers.
-  var PHONE_PATTERN = /^\+?[\d\s()-]{7,20}$/;
+  const nameInput = document.getElementById("contact-name");
+  const emailInput = document.getElementById("contact-email");
+  const messageInput = document.getElementById("contact-message");
 
-  var MESSAGE_MAX = 600;
+  const nameError = document.getElementById("name-error");
+  const emailError = document.getElementById("email-error");
+  const messageError = document.getElementById("message-error");
 
-  function init() {
-    var form = document.getElementById("contact-form");
-    if (!form) {
+  const status = document.getElementById("form-status");
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    clearErrors();
+
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    const message = messageInput.value.trim();
+
+    let firstInvalid = null;
+
+    if (!name) {
+      setError(nameInput, nameError, "Please enter your name.");
+      firstInvalid = firstInvalid || nameInput;
+    }
+
+    if (!email) {
+      setError(emailInput, emailError, "Please enter your email address.");
+      firstInvalid = firstInvalid || emailInput;
+    } else if (!emailPattern.test(email)) {
+      setError(emailInput, emailError, "That doesn't look like a valid email address.");
+      firstInvalid = firstInvalid || emailInput;
+    }
+
+    if (!message) {
+      setError(messageInput, messageError, "Please add a short message.");
+      firstInvalid = firstInvalid || messageInput;
+    }
+
+    if (firstInvalid) {
+      firstInvalid.focus();
+      setStatus("Please fix the highlighted fields.", true);
       return;
     }
 
-    var status = document.getElementById("contact-status");
-    var clearBtn = document.getElementById("clear-form");
-    var messageInput = document.getElementById("contact-message");
-    var messageCount = document.getElementById("message-count");
+    const submitBtn = form.querySelector("button[type='submit']");
+    submitBtn.disabled = true;
+    setStatus("Sending...", false);
 
-    var FIELDS = [
-      {
-        input: document.getElementById("contact-name"),
-        error: document.getElementById("error-name"),
-        validate: function (value) {
-          if (value.length < 2) {
-            return "Please give us your name.";
-          }
-          if (value.length > 80) {
-            return "Names are capped at 80 characters.";
-          }
-          return "";
-        }
-      },
-      {
-        input: document.getElementById("contact-email"),
-        error: document.getElementById("error-email"),
-        validate: function (value) {
-          if (!value) {
-            return "We need an email address to reply to.";
-          }
-          if (!EMAIL_PATTERN.test(value)) {
-            return "That doesn't look like a valid email address.";
-          }
-          return "";
-        }
-      },
-      {
-        input: document.getElementById("contact-phone"),
-        error: document.getElementById("error-phone"),
-        validate: function (value) {
-          // Optional: empty is valid, anything present must be plausible.
-          if (!value) {
-            return "";
-          }
-          if (!PHONE_PATTERN.test(value)) {
-            return "Use digits, spaces and an optional leading +.";
-          }
-          return "";
-        }
-      },
-      {
-        input: document.getElementById("contact-subject"),
-        error: document.getElementById("error-subject"),
-        validate: function (value) {
-          if (!value) {
-            return "Pick a subject so we can route your message.";
-          }
-          return "";
-        }
-      },
-      {
-        input: messageInput,
-        error: document.getElementById("error-message"),
-        validate: function (value) {
-          if (value.length < 10) {
-            return "Tell us a little more, at least 10 characters.";
-          }
-          if (value.length > MESSAGE_MAX) {
-            return "Messages are capped at " + MESSAGE_MAX + " characters.";
-          }
-          return "";
-        }
-      }
-    ].filter(function (field) {
-      return field.input && field.error;
-    });
-
-    function showError(field, message) {
-      field.error.textContent = message;
-      field.input.classList.toggle("is-invalid", Boolean(message));
-      field.input.setAttribute("aria-invalid", message ? "true" : "false");
-    }
-
-    function checkField(field) {
-      var message = field.validate(field.input.value.trim());
-      showError(field, message);
-      return !message;
-    }
-
-    function setStatus(text, isError) {
-      if (!status) {
-        return;
-      }
-      status.textContent = text;
-      status.classList.toggle("is-error", Boolean(isError));
-    }
-
-    function updateCount() {
-      if (messageCount && messageInput) {
-        messageCount.textContent = messageInput.value.length + " / " + MESSAGE_MAX;
-      }
-    }
-
-    FIELDS.forEach(function (field) {
-      // A select fires change, not input, when picked with the keyboard.
-      var eventName = field.input.tagName === "SELECT" ? "change" : "input";
-
-      // Clear an error as soon as the field is corrected, rather than making
-      // the user resubmit to find out.
-      field.input.addEventListener(eventName, function () {
-        if (field.input.classList.contains("is-invalid")) {
-          checkField(field);
-        }
+    try {
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: new FormData(form)
       });
 
-      field.input.addEventListener("blur", function () {
-        if (field.input.value.trim()) {
-          checkField(field);
-        }
-      });
-    });
+      if (!response.ok) throw new Error("Formspree returned " + response.status);
 
-    if (messageInput) {
-      messageInput.addEventListener("input", updateCount);
-      updateCount();
-    }
-
-    if (clearBtn) {
-      clearBtn.addEventListener("click", function () {
-        // type="reset" empties the fields; the error state and the counter are
-        // ours to clear. Deferred so it runs after the native reset.
-        window.setTimeout(function () {
-          FIELDS.forEach(function (field) {
-            showError(field, "");
-          });
-          setStatus("", false);
-          updateCount();
-        }, 0);
-      });
-    }
-
-    form.addEventListener("submit", function (event) {
-      event.preventDefault();
-
-      var firstInvalid = null;
-
-      FIELDS.forEach(function (field) {
-        if (!checkField(field) && !firstInvalid) {
-          firstInvalid = field.input;
-        }
-      });
-
-      if (firstInvalid) {
-        firstInvalid.focus();
-        setStatus("Please fix the highlighted fields.", true);
-        return;
-      }
-
+      setStatus(`Thanks, ${name} — we've got your message and will reply soon.`, false);
       form.reset();
-      FIELDS.forEach(function (field) {
-        showError(field, "");
-      });
-      updateCount();
+    } catch (err) {
+      console.error(err);
+      setStatus("Something went wrong sending your message — try again, or email us directly.", true);
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
 
-      // Honest about what happens: there is no mail server behind this yet.
-      setStatus("Thanks. Your message has been checked but not sent, the shop has no mail server yet.", false);
+  [nameInput, emailInput, messageInput].forEach((input) => {
+    input.addEventListener("input", () => {
+      input.classList.remove("error");
+      const errorEl = document.getElementById(`${input.name}-error`);
+      if (errorEl) errorEl.textContent = "";
     });
+  });
+
+  function setError(input, errorEl, text) {
+    input.classList.add("error");
+    errorEl.textContent = text;
   }
 
-  document.addEventListener("DOMContentLoaded", init);
-})();
+  function clearErrors() {
+    [nameInput, emailInput, messageInput].forEach((input) => input.classList.remove("error"));
+    [nameError, emailError, messageError].forEach((el) => (el.textContent = ""));
+  }
+
+  function setStatus(text, isError) {
+    status.textContent = text;
+    status.classList.toggle("error", isError);
+  }
+}
