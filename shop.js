@@ -181,18 +181,27 @@
   }
 
   function addToBasket(book) {
-    var items = window.LocalBasket
-      ? window.LocalBasket.add(book, 1)
-      : null;
+    if (!window.LocalBasket) {
+      // local-basket.js didn't load — most likely missing from the deployed
+      // site, or its <script> tag is missing/after shop.js in this page.
+      // Fail loudly instead of showing a success toast for something that
+      // didn't happen.
+      console.error(
+        "LocalBasket is not defined — local-basket.js must be included " +
+        "in shop.html, before shop.js. Nothing was added to the basket."
+      );
+      var status2 = document.getElementById("basket-status");
+      if (status2) status2.textContent = "Couldn't add " + book.title + " — basket isn't working right now.";
+      return;
+    }
 
+    window.LocalBasket.add(book, 1);
     showToast(book.title);
 
     var status = document.getElementById("basket-status");
     if (status) {
-      var total = window.LocalBasket ? window.LocalBasket.totalCount() : null;
-      status.textContent = total === null
-        ? book.title + " added."
-        : book.title + " added. " + total + " item" + (total === 1 ? "" : "s") + " in basket.";
+      var total = window.LocalBasket.totalCount();
+      status.textContent = book.title + " added. " + total + " item" + (total === 1 ? "" : "s") + " in basket.";
     }
   }
 
