@@ -7,8 +7,41 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* ---------------------------------------------------------------------
+       Page-specific only, scoped to .page-home. Mirrors the .book-cover-img /
+       .has-cover pattern used on the shop page, so the "New This Week"
+       preview (still static markup, not Supabase-driven) shows real covers
+       instead of staying flat colour once the shop page has photos.
+    --------------------------------------------------------------------- */
+
+    .page-home .book-cover {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-home .book-cover-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .page-home .book-cover-title,
+    .page-home .book-cover-author {
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-home .book-cover.has-cover .book-cover-title,
+    .page-home .book-cover.has-cover .book-cover-author {
+      display: none;
+    }
+  </style>
 </head>
-<body>
+<body class="page-home">
 
   <header class="site-header">
     <div class="container header-inner">
@@ -61,8 +94,11 @@
         <a href="contact.html" class="link-arrow">Find us &rarr;</a>
       </div>
       <div class="story-image">
+        <!-- Temporary Unsplash hot-link (Pickawood, Unsplash License, no attribution
+             required). Breaks the "never hot-linked" rule in CLAUDE.md — replace with
+             a committed file at images/story-shelf.jpg before this is submitted. -->
         <img
-            src="images/story-shelf.jpg"
+            src="https://images.unsplash.com/photo-1593430980369-68efc5a5eb34?w=1200&q=80&auto=format&fit=crop"
             alt="Shelves of books at The Paper Trail."
             loading="lazy"
             decoding="async">
@@ -77,9 +113,20 @@
         <a href="shop.html" class="link-arrow">View all &rarr;</a>
       </div>
 
+      <!-- Same temporary Unsplash hot-links as the matching rows in
+           004_cover_color_and_reseed.sql, kept in sync by hand since this
+           markup is static, not Supabase-driven. See the SQL migration for
+           the shop page's own covers, and CLAUDE.md "Known state" for the
+           swap-back-to-local plan. -->
       <div class="book-grid">
         <article class="book-card" style="--card-color:#2f4f3b">
           <div class="book-cover">
+            <img class="book-cover-img"
+                 src="https://images.unsplash.com/photo-1626657171364-4af23203469b?w=800&q=80&auto=format&fit=crop"
+                 alt="Cover of Intermezzo by Sally Rooney"
+                 loading="lazy" decoding="async"
+                 onload="this.parentElement.classList.add('has-cover')"
+                 onerror="this.remove()">
             <span class="book-cover-title">Intermezzo</span>
             <span class="book-cover-author">Sally Rooney</span>
           </div>
@@ -89,6 +136,12 @@
 
         <article class="book-card" style="--card-color:#1c3049">
           <div class="book-cover">
+            <img class="book-cover-img"
+                 src="https://images.unsplash.com/photo-1776766848535-7f94d9cb152c?w=800&q=80&auto=format&fit=crop"
+                 alt="Cover of James by Percival Everett"
+                 loading="lazy" decoding="async"
+                 onload="this.parentElement.classList.add('has-cover')"
+                 onerror="this.remove()">
             <span class="book-cover-title">James</span>
             <span class="book-cover-author">Percival Everett</span>
           </div>
@@ -98,6 +151,12 @@
 
         <article class="book-card" style="--card-color:#4b6b34">
           <div class="book-cover">
+            <img class="book-cover-img"
+                 src="https://images.unsplash.com/photo-1768771463712-39c53a5b5ff8?w=800&q=80&auto=format&fit=crop"
+                 alt="Cover of The Serviceberry by Robin Wall Kimmerer"
+                 loading="lazy" decoding="async"
+                 onload="this.parentElement.classList.add('has-cover')"
+                 onerror="this.remove()">
             <span class="book-cover-title">The Serviceberry</span>
             <span class="book-cover-author">Robin Wall Kimmerer</span>
           </div>
@@ -107,6 +166,12 @@
 
         <article class="book-card" style="--card-color:#402a5c">
           <div class="book-cover">
+            <img class="book-cover-img"
+                 src="https://images.unsplash.com/photo-1603531763662-109ff15864c0?w=800&q=80&auto=format&fit=crop"
+                 alt="Cover of Witch by Rebecca Tam&aacute;s"
+                 loading="lazy" decoding="async"
+                 onload="this.parentElement.classList.add('has-cover')"
+                 onerror="this.remove()">
             <span class="book-cover-title">Witch</span>
             <span class="book-cover-author">Rebecca Tam&aacute;s</span>
           </div>
@@ -156,6 +221,7 @@
       <p class="newsletter-sub">New arrivals, event announcements, and the odd recommendation. No more than once a month, and never a deal.</p>
 
       <form class="newsletter-form" id="newsletter-form" novalidate>
+        <label class="visually-hidden" for="newsletter-email">Email address</label>
         <input type="email" id="newsletter-email" placeholder="Your email address" required>
         <button type="submit">Sign up</button>
       </form>
