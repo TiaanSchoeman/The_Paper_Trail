@@ -17,14 +17,18 @@
  * is a foreign key to books.id (a real UUID), and this file only has each
  * book's slug, not that id — inserting a made-up id would just fail with a
  * foreign-key error, which is exactly the kind of silent breakage this
- * change is trying to get away from. Add to Cart instead updates a local,
- * in-memory counter, the same pattern this file used before the Supabase
- * migration. Trade-off: items added here won't appear on basket.html, which
- * still reads the real cart_items table via getCart(). If the empty-grid bug
- * gets found later, swap fetchBooks()/addToCart() back in and this
- * limitation goes away with it — nothing else about the markup needs to
- * change, since buildCover()/buildCard() only care that each book object has
- * the fields listed below.
+ * change is trying to get away from. Add to Cart instead writes to
+ * LocalBasket (local-basket.js, a localStorage-backed cart keyed by slug).
+ * basket.html now reads from the same store, so items added here do show up
+ * there. Trade-off: this basket is per-browser, not per-account, and
+ * checkout on basket.html is a client-side confirmation only — nothing is
+ * written to Supabase's orders table. If the empty-grid bug gets found
+ * later, swap fetchBooks()/addToCart() back in and both limitations go away
+ * with it — nothing else about the markup needs to change, since
+ * buildCover()/buildCard() only care that each book object has the fields
+ * listed below.
+ *
+ * Requires local-basket.js to be loaded before this file.
  */
 
 (function () {
@@ -124,21 +128,71 @@
     return node;
   }
 
-  /* --- Local basket counter ---------------------------------------------
-     No Supabase write (see note above). Mirrors what basket-count/-status
-     already look like on every other page, just driven locally instead of
-     from cart_items. */
+  /* --- Basket + popup ----------------------------------------------------
+     Writes to LocalBasket (local-basket.js), which also updates the header
+     badge itself. This just handles the on-page status text and the toast
+     popup. */
 
-  var localCount = 0;
+  function injectToastStyles() {
+    if (document.getElementById("basket-toast-styles")) return;
+    var style = el("style");
+    style.id = "basket-toast-styles";
+    style.textContent =
+      ".basket-toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:1000;" +
+      "background:var(--color-green,#2b473c);color:#fff;padding:0.85rem 1.2rem;" +
+      "border-radius:6px;font-family:var(--font-sans,'Inter',sans-serif);" +
+      "font-size:0.9rem;box-shadow:0 8px 24px rgba(0,0,0,0.2);" +
+      "display:flex;align-items:center;gap:0.6rem;" +
+      "transform:translateY(12px);opacity:0;transition:transform 0.25s ease,opacity 0.25s ease;}" +
+      ".basket-toast.is-visible{transform:translateY(0);opacity:1;}" +
+      ".basket-toast a{color:#fff;text-decoration:underline;font-weight:600;white-space:nowrap;}" +
+      "@media (max-width:480px){.basket-toast{left:1rem;right:1rem;bottom:1rem;}}";
+    document.head.appendChild(style);
+  }
 
-  function addToLocalBasket(title) {
-    localCount += 1;
-    var counter = document.getElementById("basket-count");
+  function showToast(title) {
+    injectToastStyles();
+
+    var existing = document.getElementById("basket-toast");
+    if (existing) existing.remove();
+
+    var toast = el("div", "basket-toast");
+    toast.id = "basket-toast";
+    toast.setAttribute("role", "status");
+
+    toast.appendChild(el("span", null, title + " added to basket."));
+
+    var link = el("a", null, "View basket →");
+    link.href = "basket.html";
+    toast.appendChild(link);
+
+    document.body.appendChild(toast);
+
+    requestAnimationFrame(function () {
+      toast.classList.add("is-visible");
+    });
+
+    setTimeout(function () {
+      toast.classList.remove("is-visible");
+      setTimeout(function () {
+        toast.remove();
+      }, 250);
+    }, 3000);
+  }
+
+  function addToBasket(book) {
+    var items = window.LocalBasket
+      ? window.LocalBasket.add(book, 1)
+      : null;
+
+    showToast(book.title);
+
     var status = document.getElementById("basket-status");
-    if (counter) counter.textContent = String(localCount);
     if (status) {
-      status.textContent = title + " added. " + localCount + " item" +
-        (localCount === 1 ? "" : "s") + " in basket.";
+      var total = window.LocalBasket ? window.LocalBasket.totalCount() : null;
+      status.textContent = total === null
+        ? book.title + " added."
+        : book.title + " added. " + total + " item" + (total === 1 ? "" : "s") + " in basket.";
     }
   }
 
@@ -189,7 +243,7 @@
 
     if (inStock) {
       btn.addEventListener("click", function () {
-        addToLocalBasket(book.title);
+        addToBasket(book);
       });
     } else {
       btn.disabled = true;

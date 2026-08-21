@@ -5,20 +5,21 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Keeps the header basket badge in sync on any page that includes
-// supabase-client.js. shop.js and basket.js already manage their own count
-// after add/remove actions — this just sets the initial number on load.
+// local-basket.js. shop.js and basket.js already refresh it directly after
+// add/remove/checkout — this just sets the number on load, including on
+// pages (home, events, contact) that never touch the basket themselves.
+//
+// BACKEND NOTE (2026-08-21): this used to read the real cart via
+// ensureSession()/getCart() from supabase-client.js. Now that shop.js writes
+// to LocalBasket (local-basket.js) instead — see the note at the top of
+// shop.js for why — this reads from the same place so the badge matches
+// what basket.html actually shows.
 function initBasketCount() {
   const counter = document.getElementById("basket-count");
   if (!counter) return;
-  if (typeof ensureSession !== "function" || typeof getCart !== "function") return;
+  if (typeof window.LocalBasket === "undefined") return;
 
-  ensureSession()
-    .then(getCart)
-    .then((items) => {
-      const total = items.reduce((sum, item) => sum + item.quantity, 0);
-      counter.textContent = String(total);
-    })
-    .catch((err) => console.error(err));
+  counter.textContent = String(window.LocalBasket.totalCount());
 }
 
 function initScrollReveal() {
