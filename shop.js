@@ -1,37 +1,6 @@
-/* shop.js — The Paper Trail
- *
- * Owner: Person 2 (feature-catalog)
- *
- * Renders the BOOKS array into the card grid in shop.html. Each book carries a
- * boolean `inStock`, and "Add to Cart" is disabled when that boolean is false.
- *
- * Disabling is done on the button element itself (btn.disabled = true), not by
- * a CSS class alone. A class only changes how the button looks; the disabled
- * property is what actually blocks the click, removes it from tab order, and
- * tells assistive tech the control is unavailable.
- *
- * COVER IMAGES
- * Covers are local files under images/covers/, named after the book. Drop a
- * file in and it appears; leave it out and the card falls back to the flat
- * --card-color block with the title and author set over it, which is exactly
- * how the homepage previews look. Nothing ever renders as a broken image.
- *
- * The eight files currently in images/covers/ are typographic placeholders,
- * generated to match the colour and layout of the homepage cards. They are
- * stand-ins, not the publishers' artwork. Replacing one is a matter of
- * overwriting the file — no code change, as long as the filename stays.
- * See images/covers/README.md for the filename table and sizing.
- */
-
 (function () {
   "use strict";
 
-  /* --- Data ----------------------------------------------------------- */
-
-  var COVER_DIR = "images/covers/";
-
-  // price in cents. Integer maths avoids the floating-point rounding you get
-  // from storing 249.99 and adding it up.
   var BOOKS = [
     {
       title: "Intermezzo",
@@ -39,7 +8,7 @@
       priceCents: 34900,
       inStock: true,
       cover: "#2f4f3b",
-      coverFile: "intermezzo.jpg"
+      coverUrl: "https://images.unsplash.com/photo-1626657171364-4af23203469b?w=800&q=80&auto=format&fit=crop"
     },
     {
       title: "James",
@@ -47,7 +16,7 @@
       priceCents: 32900,
       inStock: true,
       cover: "#1c3350",
-      coverFile: "james.jpg"
+      coverUrl: "https://images.unsplash.com/photo-1776766848535-7f94d9cb152c?w=800&q=80&auto=format&fit=crop"
     },
     {
       title: "The Serviceberry",
@@ -55,7 +24,7 @@
       priceCents: 27500,
       inStock: false,
       cover: "#4a6b33",
-      coverFile: "the-serviceberry.jpg"
+      coverUrl: "https://images.unsplash.com/photo-1768771463712-39c53a5b5ff8?w=800&q=80&auto=format&fit=crop"
     },
     {
       title: "Witch",
@@ -63,7 +32,7 @@
       priceCents: 24000,
       inStock: true,
       cover: "#3d1f5c",
-      coverFile: "witch.jpg"
+      coverUrl: "https://images.unsplash.com/photo-1603531763662-109ff15864c0?w=800&q=80&auto=format&fit=crop"
     },
     {
       title: "A Thousand Small Returns",
@@ -71,7 +40,7 @@
       priceCents: 31000,
       inStock: true,
       cover: "#7a3b22",
-      coverFile: "a-thousand-small-returns.jpg"
+      coverUrl: "https://images.unsplash.com/photo-1607838660853-a2cf34eec5b9?w=800&q=80&auto=format&fit=crop"
     },
     {
       title: "Orbital",
@@ -79,7 +48,7 @@
       priceCents: 29900,
       inStock: false,
       cover: "#14343a",
-      coverFile: "orbital.jpg"
+      coverUrl: "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=800&q=80&auto=format&fit=crop"
     },
     {
       title: "The Safekeep",
@@ -87,7 +56,7 @@
       priceCents: 33500,
       inStock: true,
       cover: "#5c2338",
-      coverFile: "the-safekeep.jpg"
+      coverUrl: "https://images.unsplash.com/photo-1602965392081-51c2cefc5b7e?w=800&q=80&auto=format&fit=crop"
     },
     {
       title: "Held",
@@ -95,7 +64,7 @@
       priceCents: 28900,
       inStock: true,
       cover: "#2f3b2a",
-      coverFile: "held.jpg"
+      coverUrl: "https://images.unsplash.com/photo-1706790608211-4c03fd4f4d33?w=800&q=80&auto=format&fit=crop"
     }
   ];
 
@@ -122,9 +91,6 @@
     return node;
   }
 
-  // The basket lives in script.js so the count survives navigation and every
-  // page header shows the same number. Falls back to a local counter if
-  // script.js has not loaded.
   var localCount = 0;
 
   function updateBasket(title) {
@@ -150,17 +116,10 @@
   function buildCover(book) {
     var cover = el("div", "book-cover");
 
-    // style.css declares .book-card { --card-color: var(--color-green) } and
-    // .book-cover { background: var(--card-color) }. Setting the property on
-    // the card is how that hook is meant to be used, so the fallback colour
-    // comes from the data without any per-book CSS.
-    if (book.coverFile) {
+    if (book.coverUrl) {
       var img = el("img", "book-cover-img");
-      img.src = COVER_DIR + book.coverFile;
+      img.src = book.coverUrl;
 
-      // A real cover already shows the title and author in its own artwork, so
-      // the overlay text is hidden once the image loads (see .has-cover in
-      // shop.html) and the alt text carries the meaning instead.
       img.alt = "Cover of " + book.title + " by " + book.author;
       img.loading = "lazy";
       img.decoding = "async";
@@ -169,8 +128,6 @@
         cover.classList.add("has-cover");
       });
 
-      // File missing or unreadable: drop the <img> so the coloured block and
-      // its overlay text show, instead of a broken-image icon.
       img.addEventListener("error", function () {
         img.remove();
         cover.classList.remove("has-cover");
