@@ -1,14 +1,7 @@
-/* shop.js — The Paper Trail
- *
- * Fetches books from Supabase (table: books) and wires "Add to Cart" to a
- * real cart (tables: carts, cart_items) scoped to the visitor's anonymous
- * auth session. Requires supabase-client.js to be loaded first.
- */
-
 (function () {
   "use strict";
 
-  var COVER_DIR = ""; // image_url already stores the full relative path
+  var COVER_DIR = "";
 
   var priceFormatter = new Intl.NumberFormat("en-ZA", {
     style: "currency",

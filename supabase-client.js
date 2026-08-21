@@ -1,7 +1,3 @@
-// supabase-client.js — drop into your site, include before your page scripts:
-// <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-// <script src="/supabase-client.js"></script>
-
 const SUPABASE_URL = "https://vwgcrboinicarivabbvd.supabase.co/rest/v1/";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3Z2NyYm9pbmljYXJpdmFiYnZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyOTQ5NjAsImV4cCI6MjEwMjg3MDk2MH0.luV-5_16p_WmJGdtn_EOOqznp5GqtpordG3RqZsCoUo"; // Project Settings > API — safe to expose client-side
 
