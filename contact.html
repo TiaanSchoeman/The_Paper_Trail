@@ -1,131 +1,414 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en-ZA">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Contact — The Paper Trail</title>
+  <meta name="description" content="Find The Paper Trail at 14 Rosemary Lane, Old Town. Opening hours, phone, email and an enquiry form for orders, event bookings and stock questions.">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap">
+
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* ---------------------------------------------------------------------
+       Page-specific only. Everything here is scoped to .page-contact so it
+       cannot alter the homepage, which shares .story-grid and the form and
+       button classes from style.css.
+
+       style.css styles .newsletter-form for the dark footer band, so none of
+       it is reusable on the cream background. These rules are new, not
+       overrides.
+    --------------------------------------------------------------------- */
+
+    .page-contact .hero {
+      padding-bottom: var(--space-5);
+    }
+
+    .page-contact .contact-section {
+      padding: var(--space-5) 0 var(--space-6);
+    }
+
+    /* Mirrors .story-grid on the homepage and .shop-hero-grid on the shop,
+       so the three pages share one two-column rhythm. */
+    .page-contact .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: var(--space-5);
+      align-items: start;
+    }
+
+    .page-contact .detail-block {
+      padding-top: var(--space-3);
+      border-top: 1px solid var(--color-border);
+      margin-bottom: var(--space-4);
+    }
+
+    .page-contact .detail-block:first-child {
+      padding-top: 0;
+      border-top: none;
+    }
+
+    .page-contact .detail-block h2 {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      margin: var(--space-1) 0 var(--space-2);
+    }
+
+    .page-contact .detail-block p {
+      color: #4a453c;
+      font-size: 0.95rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .page-contact .detail-block a {
+      color: var(--color-teal);
+    }
+
+    .page-contact .detail-block a:hover {
+      text-decoration: underline;
+    }
+
+    /* Monospace figures, matching .book-price on the shop and the first line
+       of .footer-bottom. */
+    .page-contact .hours {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .page-contact .hours th,
+    .page-contact .hours td {
+      padding: 0.45rem 0;
+      border-bottom: 1px solid var(--color-border);
+      font-weight: 400;
+      color: #4a453c;
+      font-size: 0.95rem;
+      text-align: left;
+    }
+
+    .page-contact .hours tr:last-child th,
+    .page-contact .hours tr:last-child td {
+      border-bottom: none;
+    }
+
+    .page-contact .hours td {
+      font-family: "JetBrains Mono", "Courier New", monospace;
+      font-size: 0.85rem;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    /* --- Enquiry form ---------------------------------------------------
+       Same panel treatment as the add-event form on the events page. */
+
+    .page-contact .enquiry-panel {
+      padding: var(--space-4);
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+    }
+
+    .page-contact .enquiry-panel h2 {
+      font-family: var(--font-serif);
+      font-size: 1.75rem;
+      margin-bottom: var(--space-1);
+    }
+
+    .page-contact .enquiry-intro {
+      color: #4a453c;
+      font-size: 0.95rem;
+      margin-bottom: var(--space-3);
+    }
+
+    .page-contact .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-3);
+    }
+
+    .page-contact .field-wide {
+      grid-column: 1 / -1;
+    }
+
+    .page-contact label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .page-contact input,
+    .page-contact select,
+    .page-contact textarea {
+      width: 100%;
+      padding: 0.7rem 0.85rem;
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      color: var(--color-text);
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 2px;
+    }
+
+    .page-contact textarea {
+      resize: vertical;
+      min-height: 7rem;
+    }
+
+    .page-contact input:focus,
+    .page-contact select:focus,
+    .page-contact textarea:focus {
+      outline: 2px solid var(--color-green);
+      outline-offset: 1px;
+    }
+
+    .page-contact input.is-invalid,
+    .page-contact select.is-invalid,
+    .page-contact textarea.is-invalid {
+      border-color: var(--color-rust);
+      background: #fbf1ec;
+    }
+
+    /* min-height reserves the line so showing an error does not shift the
+       fields below it. */
+    .page-contact .field-error {
+      display: block;
+      margin-top: 0.3rem;
+      font-size: 0.78rem;
+      color: var(--color-rust);
+      min-height: 1em;
+    }
+
+    .page-contact .char-count {
+      display: block;
+      margin-top: 0.3rem;
+      font-family: "JetBrains Mono", "Courier New", monospace;
+      font-size: 0.7rem;
+      color: var(--color-text-muted);
+      text-align: right;
+    }
+
+    .page-contact .form-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      align-items: center;
+      margin-top: var(--space-3);
+    }
+
+    .page-contact .form-status {
+      font-size: 0.85rem;
+      color: var(--color-green);
+    }
+
+    .page-contact .form-status.is-error {
+      color: var(--color-rust);
+    }
+
+    @media (max-width: 900px) {
+      .page-contact .contact-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .page-contact .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
-<body>
+<body class="page-contact">
 
   <header class="site-header">
     <div class="container header-inner">
-      <a href="index.html" class="logo">
+      <a class="logo" href="index.html">
         <span class="logo-title">The Paper Trail</span>
         <span class="logo-sub">Booksellers since 1998</span>
       </a>
 
-      <nav class="main-nav" aria-label="Primary">
+      <button class="nav-toggle" type="button" aria-label="Menu"
+              aria-expanded="false" aria-controls="main-nav">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="main-nav" id="main-nav" aria-label="Primary">
         <a href="index.html">Home</a>
         <a href="events.html">What's On</a>
         <a href="shop.html">Shop</a>
-        <a href="contact.html" class="active">Contact</a>
+        <a href="contact.html" class="active" aria-current="page">Contact</a>
       </nav>
 
       <button class="btn-basket" type="button" aria-label="View basket">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M6 6h15l-1.5 9h-12z"/>
-          <circle cx="9" cy="20" r="1"/>
-          <circle cx="18" cy="20" r="1"/>
-          <path d="M6 6L4 3H2"/>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <path d="M3 6h18"></path>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
         </svg>
-        Basket
+        Basket <span class="basket-count" data-basket-count>0</span>
       </button>
     </div>
   </header>
 
-  <section class="page-header">
-    <div class="container">
-      <p class="eyebrow">Get In Touch</p>
-      <h1>Contact</h1>
-      <p class="page-lede">Questions about an event, a special order, or just want to say hello? We'd love to hear from you.</p>
-    </div>
-  </section>
+  <main>
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">14 Rosemary Lane &middot; Old Town &middot; Since 1998</p>
+        <h1 class="hero-title">Find Us</h1>
+        <p class="hero-sub">Booksellers since 1998</p>
+        <hr class="hero-divider">
+        <p class="hero-tagline">
+          At the top of Rosemary Lane, in the old printer's shop with the green door.
+          Come in, or send us a note and we will reply within two working days.
+        </p>
+      </div>
+    </section>
 
-  <section class="contact-section reveal">
-    <div class="container contact-grid">
+    <section class="contact-section">
+      <div class="container contact-grid">
 
-      <form class="contact-form" id="contact-form" novalidate>
-        <div class="form-field">
-          <label for="contact-name">Name</label>
-          <input type="text" id="contact-name" name="name" placeholder="Your name" required>
-          <span class="field-error" id="name-error"></span>
+        <div>
+          <div class="detail-block">
+            <p class="eyebrow eyebrow-teal">Visit</p>
+            <h2>The shop</h2>
+            <address>
+              <p>14 Rosemary Lane</p>
+              <p>Old Town</p>
+            </address>
+          </div>
+
+          <div class="detail-block">
+            <p class="eyebrow eyebrow-teal">Speak to us</p>
+            <h2>Phone and email</h2>
+            <p><a href="tel:+27115550198">+27 11 555 0198</a></p>
+            <p><a href="mailto:hello@thepapertrail.co.za">hello@thepapertrail.co.za</a></p>
+            <p>Readings and bookings: <a href="mailto:events@thepapertrail.co.za">events@thepapertrail.co.za</a></p>
+          </div>
+
+          <div class="detail-block">
+            <p class="eyebrow eyebrow-teal">Opening hours</p>
+            <h2>When we are open</h2>
+            <table class="hours">
+              <caption class="visually-hidden">Opening hours by day</caption>
+              <tbody>
+                <tr><th scope="row">Monday to Friday</th><td>09:00&ndash;18:00</td></tr>
+                <tr><th scope="row">Saturday</th><td>09:00&ndash;16:00</td></tr>
+                <tr><th scope="row">Sunday</th><td>Closed</td></tr>
+                <tr><th scope="row">Event evenings</th><td>Until 21:00</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        <div class="form-field">
-          <label for="contact-email">Email</label>
-          <input type="email" id="contact-email" name="email" placeholder="you@example.com" required>
-          <span class="field-error" id="email-error"></span>
+        <div class="enquiry-panel">
+          <h2>Send us a note</h2>
+          <p class="enquiry-intro">
+            Orders, event bookings, second-hand valuations, or anything else.
+            Fields marked required must be filled in.
+          </p>
+
+          <!-- novalidate turns off the browser's own bubbles so the messages
+               below are the only ones shown. The JS still checks everything. -->
+          <form id="contact-form" novalidate>
+            <div class="form-grid">
+              <div>
+                <label for="contact-name">Name (required)</label>
+                <input type="text" id="contact-name" name="name" maxlength="80"
+                       autocomplete="name" required>
+                <span class="field-error" id="error-name"></span>
+              </div>
+
+              <div>
+                <label for="contact-email">Email (required)</label>
+                <input type="email" id="contact-email" name="email" maxlength="120"
+                       autocomplete="email" required>
+                <span class="field-error" id="error-email"></span>
+              </div>
+
+              <div>
+                <label for="contact-phone">Phone (optional)</label>
+                <input type="tel" id="contact-phone" name="phone" maxlength="20"
+                       autocomplete="tel">
+                <span class="field-error" id="error-phone"></span>
+              </div>
+
+              <div>
+                <label for="contact-subject">Subject (required)</label>
+                <select id="contact-subject" name="subject" required>
+                  <option value="">Choose one</option>
+                  <option value="order">Order or stock enquiry</option>
+                  <option value="event">Event booking</option>
+                  <option value="secondhand">Second-hand valuation</option>
+                  <option value="other">Something else</option>
+                </select>
+                <span class="field-error" id="error-subject"></span>
+              </div>
+
+              <div class="field-wide">
+                <label for="contact-message">Message (required)</label>
+                <textarea id="contact-message" name="message" maxlength="600" required></textarea>
+                <span class="char-count" id="message-count">0 / 600</span>
+                <span class="field-error" id="error-message"></span>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn btn-primary" type="submit">Send message</button>
+              <button class="btn btn-outline" type="reset" id="clear-form">Clear</button>
+              <span class="form-status" id="contact-status" role="status" aria-live="polite"></span>
+            </div>
+          </form>
         </div>
 
-        <div class="form-field">
-          <label for="contact-message">Message</label>
-          <textarea id="contact-message" name="message" rows="6" placeholder="Tell us what's on your mind..." required></textarea>
-          <span class="field-error" id="message-error"></span>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Send message</button>
-        <p class="form-status" id="form-status" aria-live="polite"></p>
-      </form>
-
-      <aside class="contact-info">
-        <div class="info-block">
-          <p class="footer-heading">Visit</p>
-          <p>14 Rosemary Lane<br>Old Town</p>
-          <p>Mon&ndash;Fri 09:00&ndash;18:00<br>Sat 09:00&ndash;16:00<br>Sun Closed</p>
-        </div>
-
-        <div class="info-block">
-          <p class="footer-heading">Email</p>
-          <p><a href="mailto:hello@thepapertrail.co.za" class="link-arrow">hello@thepapertrail.co.za</a></p>
-        </div>
-
-        <div class="info-block">
-          <p class="footer-heading">Follow</p>
-          <a href="#" target="_blank" rel="noopener">Instagram</a>
-          <a href="#" target="_blank" rel="noopener">Facebook</a>
-          <a href="#" target="_blank" rel="noopener">Twitter / X</a>
-        </div>
-      </aside>
-
-    </div>
-  </section>
+      </div>
+    </section>
+  </main>
 
   <footer class="site-footer">
-    <div class="container footer-grid">
-      <div class="footer-brand">
-        <p class="logo-title">The Paper Trail</p>
-        <p class="est">Est. 1998</p>
-        <p>An independent bookshop turning into something else three nights a week, since 1998.</p>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <p class="logo-title">The Paper Trail</p>
+          <p class="est">Est. 1998</p>
+          <p>An independent bookshop turning into something else three nights a week, since 1998.</p>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-heading">Visit</p>
+          <a href="contact.html">14 Rosemary Lane</a>
+          <a href="contact.html">Old Town</a>
+          <p>
+            Mon&ndash;Fri 09:00&ndash;18:00<br>
+            Sat 09:00&ndash;16:00<br>
+            Sun Closed
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-heading">Navigate</p>
+          <a href="index.html">Home</a>
+          <a href="events.html">What's On</a>
+          <a href="shop.html">Shop</a>
+          <a href="contact.html">Contact</a>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-heading">Follow</p>
+          <a href="https://www.instagram.com/thepapertrailbooks" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.facebook.com/thepapertrailbooks" target="_blank" rel="noopener">Facebook</a>
+          <a href="https://x.com/papertrailbooks" target="_blank" rel="noopener">Twitter / X</a>
+        </div>
       </div>
 
-      <div class="footer-col">
-        <p class="footer-heading">Visit</p>
-        <p>14 Rosemary Lane<br>Old Town</p>
-        <p>Mon&ndash;Fri 09:00&ndash;18:00<br>Sat 09:00&ndash;16:00<br>Sun Closed</p>
+      <div class="footer-bottom">
+        <p>The Paper Trail &middot; 14 Rosemary Lane &middot; Old Town &middot; Est. 1998</p>
+        <p>&copy; 2026 The Paper Trail. Independently set and printed in Old Town.</p>
       </div>
-
-      <div class="footer-col">
-        <p class="footer-heading">Navigate</p>
-        <a href="index.html">Home</a>
-        <a href="events.html">What's On</a>
-        <a href="shop.html">Shop</a>
-        <a href="contact.html">Contact</a>
-      </div>
-
-      <div class="footer-col">
-        <p class="footer-heading">Follow</p>
-        <a href="#" target="_blank" rel="noopener">Instagram</a>
-        <a href="#" target="_blank" rel="noopener">Facebook</a>
-        <a href="#" target="_blank" rel="noopener">Twitter / X</a>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <p>The Paper Trail &middot; 14 Rosemary Lane &middot; Old Town &middot; Est. 1998</p>
-      <p>&copy; 2026 The Paper Trail. Independently set and printed in Old Town.</p>
     </div>
   </footer>
 
