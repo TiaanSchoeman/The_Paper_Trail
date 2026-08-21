@@ -14,11 +14,6 @@
   <link rel="stylesheet" href="style.css">
 
   <style>
-    /* ---------------------------------------------------------------------
-       Page-specific only. Everything here is scoped to .page-events so it
-       cannot alter the homepage's three-card events preview, which uses the
-       same .event-grid / .event-card classes from style.css.
-    --------------------------------------------------------------------- */
 
     .page-events .hero {
       padding-bottom: var(--space-5);
@@ -28,9 +23,6 @@
       padding: var(--space-5) 0 var(--space-6);
     }
 
-    /* style.css sizes .event-grid for exactly three cards in one row.
-       A full listing wraps, so rows need separating and the left border has
-       to reset on every row, not only on the first card. */
     .page-events #events-count {
       margin-top: var(--space-1);
     }

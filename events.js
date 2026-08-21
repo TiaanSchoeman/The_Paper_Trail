@@ -1,19 +1,4 @@
-/* events.js — The Paper Trail
- *
- * BACKEND NOTE (2026-08-21): same issue and same fix as shop.js — the
- * Supabase-fetched version (supabase.from("events").select("*")...) was
- * rendering an empty grid on the live site with no console error. This
- * reverts to a hardcoded array rendered on load, the same pattern
- * index.html's static events preview already uses successfully.
- *
- * ADD EVENT FORM: previously inserted into the Supabase events table. That's
- * removed too — it now just pushes the new event into the in-memory EVENTS
- * array and re-renders, so the button actually works (the earlier version's
- * insert() call was one more thing depending on the same broken fetch path).
- * The trade-off is real: an event added here lives only in this browser tab
- * and is gone on refresh, since nothing is written anywhere. If the
- * empty-grid bug gets found later, swap the insert() call back in.
- */
+
 
 (function () {
   "use strict";

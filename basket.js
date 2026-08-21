@@ -1,20 +1,3 @@
-/* basket.js — The Paper Trail
- *
- * BACKEND NOTE (2026-08-21): reads from LocalBasket (local-basket.js), not
- * Supabase's cart_items table. shop.js's "Add to Cart" writes there too, so
- * this page now actually shows what got added — previously shop.js used a
- * page-local counter that reset on navigation, so nothing this page fetched
- * from Supabase ever matched it. Requires local-basket.js to be loaded
- * before this file.
- *
- * CHECKOUT: no order is written to Supabase. checkout_cart() is an RPC that
- * operates on real cart_items rows tied to the visitor's auth session — this
- * basket has no such rows, only slugs in localStorage, so there's nothing
- * for that RPC to act on. "Place order" below is a client-side confirmation
- * only: it validates the form, shows a reference, and clears the local
- * basket. If/when the shop goes back to being Supabase-driven, swap this
- * for a real checkout({ email, name }) call again.
- */
 
 (function () {
   "use strict";

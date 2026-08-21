@@ -1,36 +1,3 @@
-/* shop.js — The Paper Trail
- *
- * BACKEND NOTE (2026-08-21): the Supabase-fetched version of this page
- * (ensureSession().then(fetchBooks)) was rendering an empty grid on the live
- * site with no console error, and the cause hasn't been pinned down remotely —
- * supabase-client.js, the jsdelivr CDN bundle, and the books table itself all
- * checked out fine when tested directly. Rather than leave the shop page
- * broken while that gets debugged with real browser DevTools, this reverts
- * to the same approach index.html's "New This Week" section already uses
- * successfully: a hardcoded array rendered on load, no fetch involved.
- *
- * Data (titles, prices, stock, cover photos) mirrors what was last confirmed
- * live in the books table after 006_cover_images_unsplash.sql ran (see the
- * pasted REST response this was checked against).
- *
- * CART CHANGE: "Add to Cart" no longer writes to Supabase. cart_items.book_id
- * is a foreign key to books.id (a real UUID), and this file only has each
- * book's slug, not that id — inserting a made-up id would just fail with a
- * foreign-key error, which is exactly the kind of silent breakage this
- * change is trying to get away from. Add to Cart instead writes to
- * LocalBasket (local-basket.js, a localStorage-backed cart keyed by slug).
- * basket.html now reads from the same store, so items added here do show up
- * there. Trade-off: this basket is per-browser, not per-account, and
- * checkout on basket.html is a client-side confirmation only — nothing is
- * written to Supabase's orders table. If the empty-grid bug gets found
- * later, swap fetchBooks()/addToCart() back in and both limitations go away
- * with it — nothing else about the markup needs to change, since
- * buildCover()/buildCard() only care that each book object has the fields
- * listed below.
- *
- * Requires local-basket.js to be loaded before this file.
- */
-
 (function () {
   "use strict";
 
@@ -109,8 +76,6 @@
     }
   ];
 
-  /* --- Helpers ---------------------------------------------------------- */
-
   var priceFormatter = new Intl.NumberFormat("en-ZA", {
     style: "currency",
     currency: "ZAR",
@@ -127,11 +92,6 @@
     if (text !== undefined) node.textContent = text;
     return node;
   }
-
-  /* --- Basket + popup ----------------------------------------------------
-     Writes to LocalBasket (local-basket.js), which also updates the header
-     badge itself. This just handles the on-page status text and the toast
-     popup. */
 
   function injectToastStyles() {
     if (document.getElementById("basket-toast-styles")) return;
@@ -182,10 +142,6 @@
 
   function addToBasket(book) {
     if (!window.LocalBasket) {
-      // local-basket.js didn't load — most likely missing from the deployed
-      // site, or its <script> tag is missing/after shop.js in this page.
-      // Fail loudly instead of showing a success toast for something that
-      // didn't happen.
       console.error(
         "LocalBasket is not defined — local-basket.js must be included " +
         "in shop.html, before shop.js. Nothing was added to the basket."
@@ -204,8 +160,6 @@
       status.textContent = book.title + " added. " + total + " item" + (total === 1 ? "" : "s") + " in basket.";
     }
   }
-
-  /* --- Card --------------------------------------------------------------- */
 
   function buildCover(book) {
     var cover = el("div", "book-cover");
@@ -263,8 +217,6 @@
     card.appendChild(btn);
     return card;
   }
-
-  /* --- Render --------------------------------------------------------- */
 
   function render() {
     var grid = document.getElementById("book-grid");

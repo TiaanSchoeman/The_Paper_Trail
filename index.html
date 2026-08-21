@@ -9,13 +9,6 @@
   <link rel="stylesheet" href="style.css">
 
   <style>
-    /* ---------------------------------------------------------------------
-       Page-specific only, scoped to .page-home. Mirrors the .book-cover-img /
-       .has-cover pattern used on the shop page, so the "New This Week"
-       preview (still static markup, not Supabase-driven) shows real covers
-       instead of staying flat colour once the shop page has photos.
-    --------------------------------------------------------------------- */
-
     .page-home .book-cover {
       position: relative;
       overflow: hidden;
@@ -94,9 +87,6 @@
         <a href="contact.html" class="link-arrow">Find us &rarr;</a>
       </div>
       <div class="story-image">
-        <!-- Temporary Unsplash hot-link (Pickawood, Unsplash License, no attribution
-             required). Breaks the "never hot-linked" rule in CLAUDE.md — replace with
-             a committed file at images/story-shelf.jpg before this is submitted. -->
         <img
             src="https://images.unsplash.com/photo-1593430980369-68efc5a5eb34?w=1200&q=80&auto=format&fit=crop"
             alt="Shelves of books at The Paper Trail."
@@ -113,11 +103,6 @@
         <a href="shop.html" class="link-arrow">View all &rarr;</a>
       </div>
 
-      <!-- Same temporary Unsplash hot-links as the matching rows in
-           004_cover_color_and_reseed.sql, kept in sync by hand since this
-           markup is static, not Supabase-driven. See the SQL migration for
-           the shop page's own covers, and CLAUDE.md "Known state" for the
-           swap-back-to-local plan. -->
       <div class="book-grid">
         <article class="book-card" style="--card-color:#2f4f3b">
           <div class="book-cover">
